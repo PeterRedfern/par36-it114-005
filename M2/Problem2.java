@@ -21,13 +21,16 @@ public class Problem2 {
         String totalOutput = "";
         //hint: use the arr variable; don't diretly use the a1-a4 variables
         //TODO add/edit code here
-       
+                                            //par36 - 9/22/23
+        for(int i = 0; i < arr.length; i++) // goes through the array until the end
+        {
+            total += arr[i]; // adds the total of each array to a new total variable
+        } 
         //set the double to a string variable
         //TODO ensure rounding is to two decimal places (i.e., 0.10, 0.01, 1.00)
-        totalOutput = total+"";
+        totalOutput = String.format("%.2f", total)+""; // changed to string.format to do math to ensure decimal rounding
         //end add/edit section
         System.out.println("Total is " + totalOutput);
         System.out.println("End process");
     }
-    
 }
