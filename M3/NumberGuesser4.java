@@ -32,8 +32,12 @@ public class NumberGuesser4 {
         }
     }
 
-    private void loadState() {
-        File file = new File(fileName);
+    private void loadState() {                      //par36 9/29/23 - Username Save files
+        Scanner scan = new Scanner(System.in);      // Makes a scanner object
+        System.out.println("What is your name?"); // Asks the user to enter their name
+        String playerName = scan.nextLine();        // Makes a new string called playerName which takes the input from the user's name
+        fileName = playerName + ".txt";             // Makes a new filename variable for a text file with the user's name
+        File file = new File(fileName);             // Creates the new file with the username
         if (!file.exists()) {
             // Not providing output here as it's expected for a fresh start
             return;
@@ -135,6 +139,13 @@ public class NumberGuesser4 {
             if (strikes >= maxStrikes) {
                 lose();
                 pickNewRandom = true;
+            }
+        }                                                 //par36 9/29/23 - Higher or Lower Hint
+        if(guess < number) {                              // Checks if the guess is lower than the number
+            System.out.println("The number is higher"); // If the number is higher, it tells the user
+        } else {                                          // Else statement for the other condition
+            if(guess > number) {                          // Checks if the guess is higher
+                System.out.println("The number is lower"); // If the number is lower, it tells the user
             }
         }
     }
