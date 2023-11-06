@@ -3,6 +3,7 @@ package Project;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random; // par36 - 11/3/23 Implemented in coinflip
 
 public class Room implements AutoCloseable{
 	protected static Server server;// used to refer to accessible server functions
@@ -166,6 +167,32 @@ public class Room implements AutoCloseable{
 			// it was a command, don't broadcast
 			return;
 		}
+		message = messageFormat(message); // par36 11/3/23 - added for message with different characteristics (bold, color) to be processed
+
+		// old flip command (work in progress) // par36 11/3/23 - added from Part3HW
+
+		/*if (message.equalsIgnoreCase("/flip")) { 
+            Random random = new Random(); // Creates a random object to generate heads or tails
+            int randomValue = random.nextInt(2); // random number which is generated and used in the if else loop
+            String result;
+            if (randomValue == 0) { // If/else loop which checks if the int randomValue is equal to
+                result = "heads"; // 0 and sets the String result to heads or tails
+            } else {
+                result = "tails";
+            }
+            String coinFlipMessage = "Flipped a coin and got " + result; // toString for the result to be
+                                                                                     // printed
+            Iterator<ServerThread> it = clients.iterator(); // iterator object which is used to look through clients
+            while (it.hasNext()) { // goes through the clients in the server with a while loop
+                ServerThread client = it.next();
+                boolean wasSuccessful = client.(coinFlipMessage); // sends the message if the client exists
+                if (!wasSuccessful) { // if the message doesn't send/has an error, it removes the client
+                    it.remove();
+
+                    break;
+                }
+            }
+        }*/
 		
 		String from = (sender == null ? "Room" : sender.getClientName());
 		Iterator<ServerThread> iter = clients.iterator();
@@ -199,4 +226,8 @@ public class Room implements AutoCloseable{
 		isRunning = false;
 		clients = null;
 	}
+	public String messageFormat(String message) { // par36 11/3/23 - made so that when different formats/colors for messages are completed, the messages
+        String newMessage = message + "Edited Message"; // will change to the new type of message
+        return(newMessage); 
+    }
 }
