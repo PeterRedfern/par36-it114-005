@@ -223,7 +223,7 @@ public class Client {
                         p.getClientName(),
                         p.getMessage()));
                 break;
-            case MESSAGE:
+            case MESSAGE: // add new cases - par36 ew09twoei90wejdoioijwejohiewdijhwojsihjowidjhoewjihjwioejheihjiejgiejgiejigejeg
                 System.out.println(String.format("%s: %s",
                         p.getClientName(),
                         p.getMessage()));

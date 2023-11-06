@@ -1,12 +1,12 @@
 package Project;
 
-import java.util.ArrayList;
+import java.util.ArrayList; //processCommands in room.java as well as fonts/styles
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random; // par36 - 11/3/23 Implemented in coinflip
 
-public class Room implements AutoCloseable{
-	protected static Server server;// used to refer to accessible server functions
+public class Room implements AutoCloseable {
+	protected static Server server; // used to refer to accessible server functions
 	private String name;
 	private List<ServerThread> clients = new ArrayList<ServerThread>();
 	private boolean isRunning = false;
@@ -51,7 +51,7 @@ public class Room implements AutoCloseable{
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
-					//sendMessage(client, "joined the room " + getName());
+					// sendMessage(client, "joined the room " + getName());
 					sendConnectionStatus(client, true);
 				}
 			}.start();
@@ -67,7 +67,7 @@ public class Room implements AutoCloseable{
 		// we don't need to broadcast it to the server
 		// only to our own Room
 		if (clients.size() > 0) {
-			//sendMessage(client, "left the room");
+			// sendMessage(client, "left the room");
 			sendConnectionStatus(client, false);
 		}
 		checkClients();
@@ -99,6 +99,7 @@ public class Room implements AutoCloseable{
 				String part1 = comm[1];
 				String[] comm2 = part1.split(" ");
 				String command = comm2[0];
+				System.out.println(TextFX.colorize(command, TextFX.Color.RED)); // par36 11/6/23 - Prints out commands in red
 				String roomName;
 				wasCommand = true;
 				switch (command) {
@@ -115,6 +116,21 @@ public class Room implements AutoCloseable{
 					case LOGOFF:
 						Room.disconnectClient(client, this);
 						break;
+					case "flip":
+						Random random = new Random(); // Creates a random object to generate heads or tails
+						int randomValue = random.nextInt(2); // random number which is generated and used in the if else loop
+						String result;
+						if (randomValue == 0) { // If/else loop which checks if the int randomValue is equal to
+							result = "heads"; // 0 and sets the String result to heads or tails
+						} else {
+							result = "tails";
+						}
+						String coinFlipMessage = "Flipped a coin and got " + result; // toString for the result to be printed
+						sendMessage(client, coinFlipMessage);
+						break;
+					case "roll":
+						
+						break; 
 					default:
 						wasCommand = false;
 						break;
@@ -130,7 +146,7 @@ public class Room implements AutoCloseable{
 	// Command helper methods
 	protected static void createRoom(String roomName, ServerThread client) {
 		if (server.createNewRoom(roomName)) {
-			//server.joinRoom(roomName, client);
+			// server.joinRoom(roomName, client);
 			Room.joinRoom(roomName, client);
 		} else {
 			client.sendMessage("Server", String.format("Room %s already exists", roomName));
@@ -167,33 +183,7 @@ public class Room implements AutoCloseable{
 			// it was a command, don't broadcast
 			return;
 		}
-		message = messageFormat(message); // par36 11/3/23 - added for message with different characteristics (bold, color) to be processed
-
-		// old flip command (work in progress) // par36 11/3/23 - added from Part3HW
-
-		/*if (message.equalsIgnoreCase("/flip")) { 
-            Random random = new Random(); // Creates a random object to generate heads or tails
-            int randomValue = random.nextInt(2); // random number which is generated and used in the if else loop
-            String result;
-            if (randomValue == 0) { // If/else loop which checks if the int randomValue is equal to
-                result = "heads"; // 0 and sets the String result to heads or tails
-            } else {
-                result = "tails";
-            }
-            String coinFlipMessage = "Flipped a coin and got " + result; // toString for the result to be
-                                                                                     // printed
-            Iterator<ServerThread> it = clients.iterator(); // iterator object which is used to look through clients
-            while (it.hasNext()) { // goes through the clients in the server with a while loop
-                ServerThread client = it.next();
-                boolean wasSuccessful = client.(coinFlipMessage); // sends the message if the client exists
-                if (!wasSuccessful) { // if the message doesn't send/has an error, it removes the client
-                    it.remove();
-
-                    break;
-                }
-            }
-        }*/
-		
+		// message = messageFormat(message); // par36 11/3/23 - added for message with different characteristics (bold, color) to be processed
 		String from = (sender == null ? "Room" : sender.getClientName());
 		Iterator<ServerThread> iter = clients.iterator();
 		while (iter.hasNext()) {
@@ -204,7 +194,8 @@ public class Room implements AutoCloseable{
 			}
 		}
 	}
-	protected synchronized void sendConnectionStatus(ServerThread sender, boolean isConnected){
+
+	protected synchronized void sendConnectionStatus(ServerThread sender, boolean isConnected) {
 		Iterator<ServerThread> iter = clients.iterator();
 		while (iter.hasNext()) {
 			ServerThread client = iter.next();
@@ -214,20 +205,26 @@ public class Room implements AutoCloseable{
 			}
 		}
 	}
-	private void handleDisconnect(Iterator<ServerThread> iter, ServerThread client){
+
+	private void handleDisconnect(Iterator<ServerThread> iter, ServerThread client) {
 		iter.remove();
 		info("Removed client " + client.getClientName());
 		checkClients();
 		sendMessage(null, client.getClientName() + " disconnected");
 	}
+
 	public void close() {
 		server.removeRoom(this);
 		server = null;
 		isRunning = false;
 		clients = null;
 	}
-	public String messageFormat(String message) { // par36 11/3/23 - made so that when different formats/colors for messages are completed, the messages
-        String newMessage = message + "Edited Message"; // will change to the new type of message
-        return(newMessage); 
-    }
+	/*
+	 * public String messageFormat(String message) { // par36 11/3/23 - made so that
+	 * when different formats/colors for messages are completed, the messages
+	 * String newMessage = message + "Edited Message"; // will change to the new
+	 * type of message
+	 * return(newMessage);
+	 * }
+	 */
 }

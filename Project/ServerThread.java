@@ -128,7 +128,7 @@ public class ServerThread extends Thread {
                 break;
             case DISCONNECT://TBD
                 break;
-            case MESSAGE:
+            case MESSAGE: // add new cases - par36
                 if (currentRoom != null) {
                     currentRoom.sendMessage(this, p.getMessage());
                 } else {
