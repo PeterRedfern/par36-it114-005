@@ -129,8 +129,14 @@ public class Room implements AutoCloseable {
 						sendMessage(client, coinFlipMessage);
 						break;
 					case "roll":
-						
+						String roll = comm2[1];
+						if(roll.contains("d")) {
+							
+						}
+						String rollOutput = "Hi"; // placeholder
+						String rollMessage = client + " rolled " + rollOutput; 
 						break; 
+
 					default:
 						wasCommand = false;
 						break;
@@ -183,7 +189,7 @@ public class Room implements AutoCloseable {
 			// it was a command, don't broadcast
 			return;
 		}
-		// message = messageFormat(message); // par36 11/3/23 - added for message with different characteristics (bold, color) to be processed
+		message = messageFormat(message); // par36 11/3/23 - added for message with different characteristics (bold, color) to be processed
 		String from = (sender == null ? "Room" : sender.getClientName());
 		Iterator<ServerThread> iter = clients.iterator();
 		while (iter.hasNext()) {
@@ -219,12 +225,10 @@ public class Room implements AutoCloseable {
 		isRunning = false;
 		clients = null;
 	}
-	/*
-	 * public String messageFormat(String message) { // par36 11/3/23 - made so that
-	 * when different formats/colors for messages are completed, the messages
-	 * String newMessage = message + "Edited Message"; // will change to the new
-	 * type of message
-	 * return(newMessage);
-	 * }
-	 */
+	
+	 public String messageFormat(String message) { // par36 11/3/23 - made so that
+	 String newMessage = message + "Edited Message"; // will change to the new
+	 return(newMessage);
+	}
+	 
 }
