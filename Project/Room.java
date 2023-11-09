@@ -116,7 +116,7 @@ public class Room implements AutoCloseable {
 					case LOGOFF:
 						Room.disconnectClient(client, this);
 						break;
-					case "flip":
+					case "flip": // par36 11/6/23 - Flip code
 						Random random = new Random(); // Creates a random object to generate heads or tails
 						int randomValue = random.nextInt(2); // random number which is generated and used in the if else loop
 						String result;
@@ -128,14 +128,20 @@ public class Room implements AutoCloseable {
 						String coinFlipMessage = "Flipped a coin and got " + result; // toString for the result to be printed
 						sendMessage(client, coinFlipMessage);
 						break;
-					case "roll":
-						String roll = comm2[1];
-						if(roll.contains("d")) {
-							
+					case "roll": // par36 11/8/23 - Roll code (work in progress)
+						String roll = comm2[1]; // checks for characters entered after "/roll"
+						if (roll.contains("d")) { // checks if the roll command has a "d" for extra dice
+							if (roll.split(" ").length == 2) { // checks if there are numbers before and after d
+								String numbers = roll.split(" ")[1]; // puts the numbers in a StringArray
+								if (numbers.matches(roll)) { 
+									int diceNum = Integer.parseInt(numbers.split("d")[0]); // gets the number of dice from the first number
+									int diceSides = Integer.parseInt(numbers.split("d")[1]); // gets the ammount of sides from the second number
+									}
+								}
+						} else { // if there is no "d" for multiple dice
+							int intRoll = Integer.parseInt(roll); // converts roll input into integer
 						}
-						String rollOutput = "Hi"; // placeholder
-						String rollMessage = client + " rolled " + rollOutput; 
-						break; 
+						break;
 
 					default:
 						wasCommand = false;
@@ -189,7 +195,8 @@ public class Room implements AutoCloseable {
 			// it was a command, don't broadcast
 			return;
 		}
-		message = messageFormat(message); // par36 11/3/23 - added for message with different characteristics (bold, color) to be processed
+		message = messageFormat(message); // par36 11/3/23 - added for message with different characteristics (bold,
+											// color) to be processed
 		String from = (sender == null ? "Room" : sender.getClientName());
 		Iterator<ServerThread> iter = clients.iterator();
 		while (iter.hasNext()) {
@@ -225,10 +232,30 @@ public class Room implements AutoCloseable {
 		isRunning = false;
 		clients = null;
 	}
-	
-	 public String messageFormat(String message) { // par36 11/3/23 - made so that
-	 String newMessage = message + "Edited Message"; // will change to the new
-	 return(newMessage);
+
+	public String messageFormat(String message) { // par36 11/3/23 - made so that
+		String newMessage = message + "Edited Message"; // will change to the new
+
+
+		// par36 11/8/23 - Test case conditions for the different font types (to be implemented later)
+		/* 
+		String bold = "$*Hello*$";
+    	String newBold = bold.replace("$*", "<b>");
+    	newBold = newBold.replace("*$", "</b>");
+    	System.out.println(newBold);
+
+    	String italic = "$/Hello/$";
+    	String newItalic = italic.replace("$/", "<i>");
+    	newItalic = newItalic.replace("/$", "</i>");
+    	System.out.println(newItalic);
+
+    	String underline = "$_Hello_$";
+    	String newUnderline = underline.replace("$_", "<u>");
+    	newUnderline = newUnderline.replace("_$", "</u>");
+    	System.out.println(newUnderline);
+		*/
+
+		return (newMessage);
 	}
-	 
+
 }
