@@ -128,18 +128,26 @@ public class Room implements AutoCloseable {
 						String coinFlipMessage = "Flipped a coin and got " + result; // toString for the result to be printed
 						sendMessage(client, coinFlipMessage);
 						break;
-					case "roll": // par36 11/8/23 - Roll code (work in progress)
+					case "roll": // par36 11/8/23 - Roll code
+						int total = 0;
 						String roll = comm2[1]; // checks for characters entered after "/roll"
 						if (roll.contains("d")) { // checks if the roll command has a "d" for extra dice
-							if (roll.split(" ").length == 2) { // checks if there are numbers before and after d
-								String numbers = roll.split(" ")[1]; // puts the numbers in a StringArray
-								if (numbers.matches(roll)) { 
-									int diceNum = Integer.parseInt(numbers.split("d")[0]); // gets the number of dice from the first number
-									int diceSides = Integer.parseInt(numbers.split("d")[1]); // gets the ammount of sides from the second number
-									}
-								}
+							if (roll.split("d").length == 2) {
+								String[] parts = roll.split("d");
+								int diceNum = Integer.parseInt(parts[0]); // gets the number of dice
+								int diceSides = Integer.parseInt(parts[1]); // gets the number of sides on the dice
+								// math for total variable
+								int max = diceNum * diceSides;
+								int min = diceNum;
+								total = (int) ((Math.random() * (max - min + 1)) + min);
+							}
+							String rollMessage = "Rolled " + roll + " and got " + total;
+							sendMessage(client, rollMessage);
 						} else { // if there is no "d" for multiple dice
-							int intRoll = Integer.parseInt(roll); // converts roll input into integer
+							int intRoll = Integer.parseInt(roll);
+							total = (int) (Math.random() * intRoll);
+							String rollMessage = "Rolled " + roll + " and got " + total;
+							sendMessage(client, rollMessage);
 						}
 						break;
 
@@ -195,8 +203,7 @@ public class Room implements AutoCloseable {
 			// it was a command, don't broadcast
 			return;
 		}
-		message = messageFormat(message); // par36 11/3/23 - added for message with different characteristics (bold,
-											// color) to be processed
+		message = messageFormat(message); // par36 11/3/23 - added for message with different characteristics (bold, color, etc.) to be processed
 		String from = (sender == null ? "Room" : sender.getClientName());
 		Iterator<ServerThread> iter = clients.iterator();
 		while (iter.hasNext()) {
@@ -233,28 +240,35 @@ public class Room implements AutoCloseable {
 		clients = null;
 	}
 
-	public String messageFormat(String message) { // par36 11/3/23 - made so that
-		String newMessage = message + "Edited Message"; // will change to the new
+	public String messageFormat(String message) { // par36 11/3/23 - made so that the message will change to the new message
+		String newMessage = message; 
 
+		// par36 11/9/23 - Different font options and colors
 
-		// par36 11/8/23 - Test case conditions for the different font types (to be implemented later)
-		/* 
-		String bold = "$*Hello*$";
-    	String newBold = bold.replace("$*", "<b>");
-    	newBold = newBold.replace("*$", "</b>");
-    	System.out.println(newBold);
+		// bold
+		newMessage = newMessage.replace("$*", "<b>");
+		newMessage = newMessage.replace("*$", "</b>");
+		
+		// italic
+		newMessage = newMessage.replace("$/", "<i>");
+		newMessage = newMessage.replace("/$", "</i>");
+		
+		// underline
+		newMessage = newMessage.replace("$_", "<u>");
+		newMessage = newMessage.replace("_$", "</u>");
 
-    	String italic = "$/Hello/$";
-    	String newItalic = italic.replace("$/", "<i>");
-    	newItalic = newItalic.replace("/$", "</i>");
-    	System.out.println(newItalic);
+		// red
+		newMessage = newMessage.replace("$r", "#FF0000");
+		newMessage = newMessage.replace("r$", "#FF0000");
 
-    	String underline = "$_Hello_$";
-    	String newUnderline = underline.replace("$_", "<u>");
-    	newUnderline = newUnderline.replace("_$", "</u>");
-    	System.out.println(newUnderline);
-		*/
+		// green
+		newMessage = newMessage.replace("$g", "#008000");
+		newMessage = newMessage.replace("g$", "#008000");
 
+		// blue
+		newMessage = newMessage.replace("$b", "#0000FF");
+		newMessage = newMessage.replace("b$", "#0000FF");
+		
 		return (newMessage);
 	}
 
