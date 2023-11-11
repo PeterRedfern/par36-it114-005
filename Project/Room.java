@@ -1,8 +1,9 @@
+package Project;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Logger;
-
 import java.util.Random; // par36 - 11/3/23 Implemented in coinflip
 
 public class Room implements AutoCloseable {
