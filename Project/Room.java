@@ -1,6 +1,6 @@
 package Project;
 
-import java.util.ArrayList; //processCommands in room.java as well as fonts/styles
+import java.util.ArrayList; 
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random; // par36 - 11/3/23 Implemented in coinflip
@@ -246,28 +246,28 @@ public class Room implements AutoCloseable {
 		// par36 11/9/23 - Different font options and colors
 
 		// bold
-		newMessage = newMessage.replace("$*", "<b>");
-		newMessage = newMessage.replace("*$", "</b>");
+		newMessage = newMessage.replaceAll("\\$\\*", "<b>");
+		newMessage = newMessage.replaceAll("\\*\\$", "</b>");
 		
 		// italic
-		newMessage = newMessage.replace("$/", "<i>");
-		newMessage = newMessage.replace("/$", "</i>");
+		newMessage = newMessage.replaceAll("\\$/", "<i>");
+		newMessage = newMessage.replaceAll("/\\$", "</i>");
 		
 		// underline
-		newMessage = newMessage.replace("$_", "<u>");
-		newMessage = newMessage.replace("_$", "</u>");
+		newMessage = newMessage.replaceAll("\\$_", "<u>");
+		newMessage = newMessage.replaceAll("_\\$", "</u>");
 
 		// red
-		newMessage = newMessage.replace("$r", "#FF0000");
-		newMessage = newMessage.replace("r$", "#FF0000");
+		newMessage = newMessage.replaceAll("\\$r", "<font color= red>");
+		newMessage = newMessage.replaceAll("r\\$", "</font>");
 
 		// green
-		newMessage = newMessage.replace("$g", "#008000");
-		newMessage = newMessage.replace("g$", "#008000");
+		newMessage = newMessage.replaceAll("\\$g", "<font color= green>");
+		newMessage = newMessage.replaceAll("g\\$", "</font>");
 
 		// blue
-		newMessage = newMessage.replace("$b", "#0000FF");
-		newMessage = newMessage.replace("b$", "#0000FF");
+		newMessage = newMessage.replaceAll("\\$b", "<font color= blue>");
+		newMessage = newMessage.replaceAll("b\\$", "</font>");
 		
 		return (newMessage);
 	}
