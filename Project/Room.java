@@ -139,7 +139,7 @@ public class Room implements AutoCloseable {
 							result = "tails";
 						}
 						String coinFlipMessage = "Flipped a coin and got " + result; // toString for the result to be printed
-						sendMessage(client, coinFlipMessage);
+						sendMessage(client, coinFlipMessage); // Sends the message
 						break;
 					case "roll": // par36 11/8/23 - Roll code
 						int total = 0;
@@ -152,15 +152,15 @@ public class Room implements AutoCloseable {
 								// math for total variable
 								int max = diceNum * diceSides;
 								int min = diceNum;
-								total = (int) ((Math.random() * (max - min + 1)) + min);
+								total = (int) ((Math.random() * (max - min + 1)) + min); // Equation for multiple dice
 							}
-							String rollMessage = "Rolled " + roll + " and got " + total;
-							sendMessage(client, rollMessage);
+							String rollMessage = "Rolled " + roll + " and got " + total; // Message to be sent to all users
+							sendMessage(client, rollMessage); // Sends the message
 						} else { // if there is no "d" for multiple dice
-							int intRoll = Integer.parseInt(roll);
-							total = (int) (Math.random() * intRoll);
-							String rollMessage = "Rolled " + roll + " and got " + total;
-							sendMessage(client, rollMessage);
+							int intRoll = Integer.parseInt(roll); // Passes in the user input for one integer/die
+							total = (int) (Math.random() * intRoll); // Recalculates total for just one die
+							String rollMessage = "Rolled " + roll + " and got " + total; // Message to be sent to all users
+							sendMessage(client, rollMessage); // Sends the message
 						}
 						break;
                     default:
