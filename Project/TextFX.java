@@ -1,5 +1,3 @@
-package Project;
-
 public abstract class TextFX {
 
     public enum Color {
