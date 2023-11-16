@@ -1,22 +1,23 @@
 package Project;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.logging.Level;
-import java.util.logging.Logger; 
+import java.util.logging.Logger;
 
 /**
  * A server-side representation of a single client
  */
 public class ServerThread extends Thread {
-    private Socket client;
+    protected Socket client;
     private String clientName;
     private boolean isRunning = false;
     private ObjectOutputStream out;// exposed here for send()
     // private Server server;// ref to our server so we can call methods on it
     // more easily
-    private Room currentRoom;
+    protected Room currentRoom;
     private static Logger logger = Logger.getLogger(ServerThread.class.getName());
     private long myClientId;
 
@@ -36,7 +37,8 @@ public class ServerThread extends Thread {
         logger.info("ServerThread created");
         // get communication channels to single client
         this.client = myClient;
-        this.currentRoom = room;
+        // this.currentRoom = room;
+        setCurrentRoom(room);
 
     }
 
@@ -59,6 +61,7 @@ public class ServerThread extends Thread {
     protected synchronized void setCurrentRoom(Room room) {
         if (room != null) {
             currentRoom = room;
+            sendRoomName(room.getName());
         } else {
             logger.info("Passed in room was null, this shouldn't happen");
         }
@@ -72,7 +75,6 @@ public class ServerThread extends Thread {
     }
 
     // send methods
-
     public boolean sendReadyStatus(long clientId) {
         Payload p = new Payload();
         p.setPayloadType(PayloadType.READY);
@@ -160,10 +162,12 @@ public class ServerThread extends Thread {
         try (ObjectOutputStream out = new ObjectOutputStream(client.getOutputStream());
                 ObjectInputStream in = new ObjectInputStream(client.getInputStream());) {
             this.out = out;
+            logger.info("Listening for Client Payloads");
             isRunning = true;
             Payload fromClient;
             while (isRunning && // flag to let us easily control the loop
-                    (fromClient = (Payload) in.readObject()) != null // reads an object from inputStream (null would likely mean a disconnect)
+                    (fromClient = (Payload) in.readObject()) != null // reads an object from inputStream (null would
+                                                                     // likely mean a disconnect)
             ) {
 
                 logger.info("Received from client: " + fromClient);
@@ -172,7 +176,9 @@ public class ServerThread extends Thread {
             } // close while loop
         } catch (Exception e) {
             // happens when client disconnects
+            System.out.println(Constants.ANSI_BRIGHT_RED);
             e.printStackTrace();
+            System.out.println(Constants.ANSI_RESET);
             logger.info("Client disconnected");
         } finally {
             isRunning = false;
@@ -206,9 +212,6 @@ public class ServerThread extends Thread {
                 break;
             case JOIN_ROOM:
                 Room.joinRoom(p.getMessage().trim(), this);
-                break;
-            case READY:
-                // ((GameRoom) currentRoom).setReady(myClientId);
                 break;
             default:
                 break;

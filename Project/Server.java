@@ -1,4 +1,5 @@
 package Project;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -121,7 +122,11 @@ public enum Server {
         if (newRoom != null && roomName != null) {
             if (oldRoom != null && oldRoom != newRoom) {
                 logger.info(String.format("Client %s leaving old room %s", client.getClientName(), oldRoom.getName()));
-                oldRoom.removeClient(client);
+                if (oldRoom instanceof Room) {
+                    ((Room) oldRoom).removeClient(client);
+                } else {
+                    oldRoom.removeClient(client);
+                }
             }
             logger.info(String.format("Client %s joining new room %s", client.getClientName(), newRoom.getName()));
             newRoom.addClient(client);
