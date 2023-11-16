@@ -8,7 +8,6 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
 public enum Client {
@@ -158,8 +157,8 @@ public enum Client {
     }
 
     protected String getClientNameById(long clientId) {
-        if (players.containsKey(clientId)) {
-            return ((ClientPlayer) players.get(clientId)).getClientName();
+        if (userList.containsKey(clientId)) {
+            return userList.get(clientId);
         }
         if (clientId == Constants.DEFAULT_CLIENT_ID) {
             return "[Server]";
@@ -167,16 +166,15 @@ public enum Client {
         return "unkown user";
     }
 
-    private void addPlayer(long clientId, String clientName) {
-        if (!players.containsKey(clientId)) {
-            ClientPlayer cp = new ClientPlayer(clientId, clientName);
-            players.put(clientId, cp);
+    private void addClient(long clientId, String clientName) {
+        if (!userList.containsKey(clientId)) {
+            userList.put(clientId, clientName);
         }
     }
 
-    private void removePlayer(long clientId) {
-        if (players.containsKey(clientId)) {
-            players.remove(clientId);
+    private void removeClient(long clientId) {
+        if (userList.containsKey(clientId)) {
+            userList.remove(clientId);
         }
     }
 
@@ -190,7 +188,7 @@ public enum Client {
         switch (p.getPayloadType()) {
             case CONNECT:
 
-                addPlayer(p.getClientId(), p.getClientName());
+                addClient(myClientId, clientName);
                 logger.info(String.format("*%s %s*",
                         p.getClientName(),
                         p.getMessage()));
@@ -199,7 +197,7 @@ public enum Client {
                         String.format("*%s %s*", p.getClientName(), p.getMessage())));
                 break;
             case DISCONNECT:
-                removePlayer(p.getClientId());
+                removeClient(p.getClientId());
                 if (p.getClientId() == myClientId) {
                     myClientId = Constants.DEFAULT_CLIENT_ID;
                     isSeeker = false;
@@ -213,7 +211,7 @@ public enum Client {
                                 p.getMessage()))));
                 break;
             case SYNC_CLIENT:
-                addPlayer(p.getClientId(), p.getClientName());
+                addClient(p.getClientId(), p.getClientName());
                 listeners.forEach(l -> l.onSyncClient(
                         p.getClientId(), p.getClientName()));
                 break;
@@ -250,24 +248,8 @@ public enum Client {
                         rp.getRooms(), p.getMessage()));
                 break;
             case RESET_USER_LIST:
-                players.clear();
+                userList.clear();
                 listeners.forEach(l -> l.onResetUserList());
-                break;
-            case RESET_READY:
-                listeners.forEach(l -> l.onReceiveReadyCount(0));
-                break;
-            case READY:
-                logger.info(String.format("Player %s is ready", getClientNameById(p.getClientId()))
-                        + Constants.ANSI_RESET);
-                if (players.containsKey(p.getClientId())) {
-                    players.get(p.getClientId()).setReady(true);
-                }
-                listeners.forEach(l -> l.onReceiveReady(p.getClientId()));
-                long count = players.values().stream().filter(Player::isReady).count();
-                listeners.forEach(l -> l.onReceiveReadyCount(count));
-                break;
-        
-
                 break;
             default:
                 logger.warning(Constants.ANSI_RED + String.format("Unhandled Payload type: %s", p.getPayloadType())
@@ -283,7 +265,7 @@ public enum Client {
 
     private void close() {
         myClientId = Constants.DEFAULT_CLIENT_ID;
-        players.clear();
+        userList.clear();
         try {
             inputThread.interrupt();
         } catch (Exception e) {
