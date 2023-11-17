@@ -139,7 +139,7 @@ public class Room implements AutoCloseable {
 						} else {
 							result = "tails";
 						}
-						String coinFlipMessage = "Flipped a coin and got " + result; // toString for the result to be printed
+						String coinFlipMessage = "$*" + "Flipped a coin and got " + result + "*$"; // toString for the result to be printed
 						sendMessage(client, coinFlipMessage); // Sends the message
 						break;
 					case "roll": // par36 11/8/23 - Roll code
@@ -155,12 +155,12 @@ public class Room implements AutoCloseable {
 								int min = diceNum;
 								total = (int) ((Math.random() * (max - min + 1)) + min); // Equation for multiple dice
 							}
-							String rollMessage = "Rolled " + roll + " and got " + total; // Message to be sent to all users
+							String rollMessage = "$*" + "Rolled " + roll + " and got " + total + "*$"; // Message to be sent to all users
 							sendMessage(client, rollMessage); // Sends the message
 						} else { // if there is no "d" for multiple dice
 							int intRoll = Integer.parseInt(roll); // Passes in the user input for one integer/die
 							total = (int) (Math.random() * intRoll); // Recalculates total for just one die
-							String rollMessage = "Rolled " + roll + " and got " + total; // Message to be sent to all users
+							String rollMessage = "$*" +"Rolled " + roll + " and got " + total + "*$"; // Message to be sent to all users
 							sendMessage(client, rollMessage); // Sends the message
 						}
 						break;
@@ -178,8 +178,7 @@ public class Room implements AutoCloseable {
     // Command helper methods
     protected static void getRooms(String query, ServerThread client) {
         String[] rooms = Server.INSTANCE.getRooms(query).toArray(new String[0]);
-        client.sendRoomsList(rooms,
-                (rooms != null && rooms.length == 0) ? "No rooms found containing your query string" : null);
+        client.sendRoomsList(rooms,(rooms != null && rooms.length == 0) ? "No rooms found containing your query string" : null);
     }
 
     protected static void createRoom(String roomName, ServerThread client) {
@@ -236,6 +235,8 @@ public class Room implements AutoCloseable {
                 handleDisconnect(iter, client);
             }
         }
+
+        
     }
 
     protected synchronized void sendConnectionStatus(ServerThread sender, boolean isConnected) {

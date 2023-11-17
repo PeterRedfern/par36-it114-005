@@ -254,8 +254,7 @@ public class ChatPanel extends JPanel {
     public void addText(String text, Color color) {
         JPanel content = chatArea;
         // add message
-        JEditorPane textContainer = new JEditorPane("text/plain", text);
-
+        JEditorPane textContainer = new JEditorPane("text/html", text); // par36 11/17/23 - Changed to "text/html" to process new fonts
         // sizes the panel to attempt to take up the width of the container
         // and expand in height based on word wrapping
         textContainer.setLayout(null);
