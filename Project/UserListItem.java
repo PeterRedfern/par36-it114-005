@@ -8,7 +8,6 @@ import javax.swing.JPanel;
 public class UserListItem extends JPanel {
     private long clientId;
     private String clientName;
-    private long points;
     JEditorPane text = new JEditorPane("text/plain", "");
 
     public UserListItem(String clientName, long clientId) {
@@ -24,7 +23,7 @@ public class UserListItem extends JPanel {
     }
 
     private String getBaseText() {
-        return String.format("%s[%s] Pts.(%s)", clientName, clientId, points);
+        return String.format(clientName, clientId);
     }
 
     public long getClientId() {
@@ -37,11 +36,5 @@ public class UserListItem extends JPanel {
         } else {
             this.setBackground(Color.WHITE);
         }
-    }
-
-    public void setPoints(long points) {
-        this.points = points;
-        text.setText(getBaseText());
-        repaint();
     }
 }

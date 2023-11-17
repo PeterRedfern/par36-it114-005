@@ -154,7 +154,7 @@ public class ChatPanel extends JPanel {
 
             @Override
             public void componentResized(ComponentEvent e) {
-                // System.out.println("Resized to " + e.getComponent().getSize());
+                System.out.println("Resized to " + e.getComponent().getSize());
                 // rough concepts for handling resize
                 // set the dimensions based on the frame size
                 doResize();
@@ -162,7 +162,7 @@ public class ChatPanel extends JPanel {
 
             @Override
             public void componentMoved(ComponentEvent e) {
-                // System.out.println("Moved to " + e.getComponent().getLocation());
+                System.out.println("Moved to " + e.getComponent().getLocation());
             }
         });
     }
@@ -206,8 +206,8 @@ public class ChatPanel extends JPanel {
                 userListPanel.resizeUserListItems();
             }
 
-            // userListPanel.revalidate();
-            // userListPanel.repaint();
+            userListPanel.revalidate();
+            userListPanel.repaint();
             int originalWidth = chatArea.getWidth();
             if (chatArea.getWidth() != center.getWidth()) {
                 chatArea.setMinimumSize(center);
