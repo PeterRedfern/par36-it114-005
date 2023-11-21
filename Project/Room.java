@@ -113,7 +113,8 @@ public class Room implements AutoCloseable {
                 String part1 = comm[1];
                 String[] comm2 = part1.split(" ");
                 String command = comm2[0];
-                System.out.println(TextFX.colorize(command, TextFX.Color.RED)); // par36 11/6/23 - Prints out commands in red
+                System.out.println(TextFX.colorize(command, TextFX.Color.RED)); // par36 11/6/23 - Prints out commands
+                                                                                // in red
                 String roomName;
                 wasCommand = true;
                 switch (command) {
@@ -131,39 +132,67 @@ public class Room implements AutoCloseable {
                         Room.disconnectClient(client, this);
                         break;
                     case "flip": // par36 11/6/23 - Flip code
-						Random random = new Random(); // Creates a random object to generate heads or tails
-						int randomValue = random.nextInt(2); // random number which is generated and used in the if else loop
-						String result;
-						if (randomValue == 0) { // If/else loop which checks if the int randomValue is equal to
-							result = "heads"; // 0 and sets the String result to heads or tails
-						} else {
-							result = "tails";
-						}
-						String coinFlipMessage = "$*" + "Flipped a coin and got " + result + "*$"; // toString for the result to be printed
-						sendMessage(client, coinFlipMessage); // Sends the message
-						break;
-					case "roll": // par36 11/8/23 - Roll code
-						int total = 0;
-						String roll = comm2[1]; // checks for characters entered after "/roll"
-						if (roll.contains("d")) { // checks if the roll command has a "d" for extra dice
-							if (roll.split("d").length == 2) {
-								String[] parts = roll.split("d");
-								int diceNum = Integer.parseInt(parts[0]); // gets the number of dice
-								int diceSides = Integer.parseInt(parts[1]); // gets the number of sides on the dice
-								// math for total variable
-								int max = diceNum * diceSides;
-								int min = diceNum;
-								total = (int) ((Math.random() * (max - min + 1)) + min); // Equation for multiple dice
-							}
-							String rollMessage = "$*" + "Rolled " + roll + " and got " + total + "*$"; // Message to be sent to all users
-							sendMessage(client, rollMessage); // Sends the message
-						} else { // if there is no "d" for multiple dice
-							int intRoll = Integer.parseInt(roll); // Passes in the user input for one integer/die
-							total = (int) (Math.random() * intRoll); // Recalculates total for just one die
-							String rollMessage = "$*" +"Rolled " + roll + " and got " + total + "*$"; // Message to be sent to all users
-							sendMessage(client, rollMessage); // Sends the message
-						}
-						break;
+                        Random random = new Random(); // Creates a random object to generate heads or tails
+                        int randomValue = random.nextInt(2); // random number which is generated and used in the if else
+                                                             // loop
+                        String result;
+                        if (randomValue == 0) { // If/else loop which checks if the int randomValue is equal to
+                            result = "heads"; // 0 and sets the String result to heads or tails
+                        } else {
+                            result = "tails";
+                        }
+                        String coinFlipMessage = "$*" + "Flipped a coin and got " + result + "*$"; // toString for the
+                                                                                                   // result to be
+                                                                                                   // printed
+                        sendMessage(client, coinFlipMessage); // Sends the message
+                        break;
+                    case "roll": // par36 11/8/23 - Roll code
+                        int total = 0;
+                        String roll = comm2[1]; // checks for characters entered after "/roll"
+                        if (roll.contains("d")) { // checks if the roll command has a "d" for extra dice
+                            if (roll.split("d").length == 2) {
+                                String[] parts = roll.split("d");
+                                int diceNum = Integer.parseInt(parts[0]); // gets the number of dice
+                                int diceSides = Integer.parseInt(parts[1]); // gets the number of sides on the dice
+                                // math for total variable
+                                int max = diceNum * diceSides;
+                                int min = diceNum;
+                                total = (int) ((Math.random() * (max - min + 1)) + min); // Equation for multiple dice
+                            }
+                            String rollMessage = "$*" + "Rolled " + roll + " and got " + total + "*$"; // Message to be
+                                                                                                       // sent to all
+                                                                                                       // users
+                            sendMessage(client, rollMessage); // Sends the message
+                        } else { // if there is no "d" for multiple dice
+                            int intRoll = Integer.parseInt(roll); // Passes in the user input for one integer/die
+                            total = (int) (Math.random() * intRoll); // Recalculates total for just one die
+                            String rollMessage = "$*" + "Rolled " + roll + " and got " + total + "*$"; // Message to be
+                                                                                                       // sent to all
+                                                                                                       // users
+                            sendMessage(client, rollMessage); // Sends the message
+                        }
+                        break;
+                    /*case "mute": // par36 11/20/23 - Mute/unmute commands (work in progress)
+                        String muteTarget = "";
+                        String[] muteComm = message.split("mute");
+                        muteTarget = muteComm[1].split(" ")[0];
+                        boolean isMuted = false;
+                        if (muteTarget == isMuted) {
+                            sendMessage = false;
+                            sendPrivateMessage = false;
+                        }
+                        break;
+                    case "unmute":
+                        String unmuteTarget = "";
+                        String[] unmuteComm = message.split("unmute");
+                        unmuteTarget = unmuteComm[1].split(" ")[0];
+                        boolean isUnmuted = true;
+                        if (client == isUnmuted) {
+                            sendMessage = true;
+                            sendPrivateMessage = true;
+                        }
+                        break;
+                        */
                     default:
                         wasCommand = false;
                         break;
@@ -178,7 +207,8 @@ public class Room implements AutoCloseable {
     // Command helper methods
     protected static void getRooms(String query, ServerThread client) {
         String[] rooms = Server.INSTANCE.getRooms(query).toArray(new String[0]);
-        client.sendRoomsList(rooms,(rooms != null && rooms.length == 0) ? "No rooms found containing your query string" : null);
+        client.sendRoomsList(rooms,
+                (rooms != null && rooms.length == 0) ? "No rooms found containing your query string" : null);
     }
 
     protected static void createRoom(String roomName, ServerThread client) {
@@ -225,7 +255,12 @@ public class Room implements AutoCloseable {
             // it was a command, don't broadcast
             return;
         }
-        message = messageFormat(message); // par36 11/3/23 - added for message with different characteristics (bold, color, etc.) to be processed
+        if (sendPrivateMessage(sender, message)) { // par36 11/20/23 - Stops the process if the message is a private
+                                                   // message and goes to sendPrivateMessage
+            return;
+        }
+        message = messageFormat(message); // par36 11/3/23 - added for message with different characteristics (bold,
+                                          // color, etc.) to be processed
         long from = sender == null ? Constants.DEFAULT_CLIENT_ID : sender.getClientId();
         Iterator<ServerThread> iter = clients.iterator();
         while (iter.hasNext()) {
@@ -235,8 +270,31 @@ public class Room implements AutoCloseable {
                 handleDisconnect(iter, client);
             }
         }
+    }
 
-        
+    protected synchronized boolean sendPrivateMessage(ServerThread sender, String message) {
+        if (!isRunning) {
+            return false;
+        }
+        long from = sender == null ? Constants.DEFAULT_CLIENT_ID : sender.getClientId();
+        Iterator<ServerThread> iter = clients.iterator(); // par36 11/20/23 - Iterates through the clients list
+        String target = ""; // String to hold the target value
+        if (message.startsWith("@")) { // checks if the message starts with @
+            String[] comm = message.split("@"); // splits the result after @ into a string array
+            target = comm[1].split(" ")[0]; // gets the result (target user) from the string array
+            while (iter.hasNext()) {
+                ServerThread client = iter.next();
+                if (client.getClientName().equalsIgnoreCase(target)) { // if the client is equal to the target
+                    boolean messageSent = client.sendMessage(from, message); // checking if the message is sent
+                    if (!messageSent) { // if the message is not sent
+                        handleDisconnect(iter, client); // disconnect the client
+                    }
+                    sender.sendMessage(from, message); // sends the message
+                    return true; // if the second if condition isn't triggered, will return true with the boolean
+                }
+            }
+        }
+        return false;
     }
 
     protected synchronized void sendConnectionStatus(ServerThread sender, boolean isConnected) {
@@ -255,7 +313,7 @@ public class Room implements AutoCloseable {
 
     protected void handleDisconnect(Iterator<ServerThread> iter, ServerThread client) {
         if (iter != null) {
-        iter.remove();
+            iter.remove();
             iter.remove();
         } else {
             Iterator<ServerThread> iter2 = clients.iterator();
@@ -278,35 +336,36 @@ public class Room implements AutoCloseable {
         clients.clear();
     }
 
-    public String messageFormat(String message) { // par36 11/3/23 - made so that the message will change to the new message
-		String newMessage = message; 
+    public String messageFormat(String message) { // par36 11/3/23 - made so that the message will change to the new
+                                                  // message
+        String newMessage = message;
 
-		// par36 11/9/23 - Different font options and colors
+        // par36 11/9/23 - Different font options and colors
 
-		// bold
-		newMessage = newMessage.replaceAll("\\$\\*", "<b>");
-		newMessage = newMessage.replaceAll("\\*\\$", "</b>");
-		
-		// italic
-		newMessage = newMessage.replaceAll("\\$/", "<i>");
-		newMessage = newMessage.replaceAll("/\\$", "</i>");
-		
-		// underline
-		newMessage = newMessage.replaceAll("\\$_", "<u>");
-		newMessage = newMessage.replaceAll("_\\$", "</u>");
+        // bold
+        newMessage = newMessage.replaceAll("\\$\\*", "<b>");
+        newMessage = newMessage.replaceAll("\\*\\$", "</b>");
 
-		// red
-		newMessage = newMessage.replaceAll("\\$r", "<font color= red>");
-		newMessage = newMessage.replaceAll("r\\$", "</font>");
+        // italic
+        newMessage = newMessage.replaceAll("\\$/", "<i>");
+        newMessage = newMessage.replaceAll("/\\$", "</i>");
 
-		// green
-		newMessage = newMessage.replaceAll("\\$g", "<font color= green>");
-		newMessage = newMessage.replaceAll("g\\$", "</font>");
+        // underline
+        newMessage = newMessage.replaceAll("\\$_", "<u>");
+        newMessage = newMessage.replaceAll("_\\$", "</u>");
 
-		// blue
-		newMessage = newMessage.replaceAll("\\$b", "<font color= blue>");
-		newMessage = newMessage.replaceAll("b\\$", "</font>");
-		
-		return (newMessage);
-	}
+        // red
+        newMessage = newMessage.replaceAll("\\$r", "<font color= red>");
+        newMessage = newMessage.replaceAll("r\\$", "</font>");
+
+        // green
+        newMessage = newMessage.replaceAll("\\$g", "<font color= green>");
+        newMessage = newMessage.replaceAll("g\\$", "</font>");
+
+        // blue
+        newMessage = newMessage.replaceAll("\\$b", "<font color= blue>");
+        newMessage = newMessage.replaceAll("b\\$", "</font>");
+
+        return (newMessage);
+    }
 }
