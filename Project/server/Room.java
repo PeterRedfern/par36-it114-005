@@ -334,27 +334,27 @@ public class Room implements AutoCloseable {
 
         // bold
         newMessage = newMessage.replaceAll("\\*\\$", "<b>"); //replaces each commandtrigger with the wrapper for the font type
-        newMessage = newMessage.replaceAll("\\$\\*", "</b>");
+        newMessage = newMessage.replaceAll("\\$\\*", "</b>"); //assymetric so start and end trigger are different
 
         // italic
-        newMessage = newMessage.replaceAll("/\\$", "<i>");
-        newMessage = newMessage.replaceAll("\\$/", "</i>");
+        newMessage = newMessage.replaceAll("/\\$", "<i>"); //replaces each commandtrigger with the wrapper for the font type
+        newMessage = newMessage.replaceAll("\\$/", "</i>"); //assymetric so start and end trigger are different
 
         // underline
-        newMessage = newMessage.replaceAll("_\\$", "<u>");
-        newMessage = newMessage.replaceAll("\\$_", "</u>");
+        newMessage = newMessage.replaceAll("_\\$", "<u>"); //replaces each commandtrigger with the wrapper for the font type
+        newMessage = newMessage.replaceAll("\\$_", "</u>"); //assymetric so start and end trigger are different
 
         // red
-        newMessage = newMessage.replaceAll("r\\$", "<font color= red>");
-        newMessage = newMessage.replaceAll("\\$r", "</font>");
+        newMessage = newMessage.replaceAll("r\\$", "<font color= red>"); //replaces each commandtrigger with the wrapper for the color
+        newMessage = newMessage.replaceAll("\\$r", "</font>"); //assymetric so start and end trigger are different
 
         // green
-        newMessage = newMessage.replaceAll("g\\$", "<font color= green>");
-        newMessage = newMessage.replaceAll("\\$g", "</font>");
+        newMessage = newMessage.replaceAll("g\\$", "<font color= green>"); //replaces each commandtrigger with the wrapper for the color
+        newMessage = newMessage.replaceAll("\\$g", "</font>"); //assymetric so start and end trigger are different
 
         // blue
-        newMessage = newMessage.replaceAll("b\\$", "<font color= blue>");
-        newMessage = newMessage.replaceAll("\\$b", "</font>");
+        newMessage = newMessage.replaceAll("b\\$", "<font color= blue>"); //replaces each commandtrigger with the wrapper for the color
+        newMessage = newMessage.replaceAll("\\$b", "</font>"); //assymetric so start and end trigger are different
 
         return (newMessage);
     }
