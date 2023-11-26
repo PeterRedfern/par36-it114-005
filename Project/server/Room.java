@@ -117,7 +117,7 @@ public class Room implements AutoCloseable {
                 String part1 = comm[1];
                 String[] comm2 = part1.split(" ");
                 String command = comm2[0];
-                System.out.println(TextFX.colorize(command, TextFX.Color.RED)); // par36 11/6/23 - Prints out commands in red
+                System.out.println(TextFX.colorize(command, TextFX.Color.RED)); // par36 11/6/23 - Prints out commands in red (in the terminal)
                 String roomName;
                 wasCommand = true;
                 switch (command) {
@@ -143,7 +143,7 @@ public class Room implements AutoCloseable {
                         } else {
                             result = "tails";
                         }
-                        String coinFlipMessage = "$*" + "Flipped a coin and got " + result + "*$"; // toString for the result to be printed
+                        String coinFlipMessage = "*$" + "Flipped a coin and got " + result + "$*"; // toString for the result to be printed
                         sendMessage(client, coinFlipMessage); // Sends the message
                         break;
                     case "roll": // par36 11/8/23 - Roll code
@@ -159,12 +159,12 @@ public class Room implements AutoCloseable {
                                 int min = diceNum;
                                 total = (int) ((Math.random() * (max - min + 1)) + min); // Equation for multiple dice
                             }
-                            String rollMessage = "$*" + "Rolled " + roll + " and got " + total + "*$"; // Message to be sent to all users
+                            String rollMessage = "*$" + "Rolled " + roll + " and got " + total + "$*"; // Message to be sent to all users
                             sendMessage(client, rollMessage); // Sends the message
                         } else { // if there is no "d" for multiple dice
                             int intRoll = Integer.parseInt(roll); // Passes in the user input for one integer/die
                             total = (int) (Math.random() * intRoll); // Recalculates total for just one die
-                            String rollMessage = "$*" + "Rolled " + roll + " and got " + total + "*$"; // Message to be sent to all users
+                            String rollMessage = "*$" + "Rolled " + roll + " and got " + total + "$*"; // Message to be sent to all users
                             sendMessage(client, rollMessage); // Sends the message
                         }
                         break;
@@ -334,27 +334,27 @@ public class Room implements AutoCloseable {
 
         // bold
         newMessage = newMessage.replaceAll("\\*\\$", "<b>"); //replaces each commandtrigger with the wrapper for the font type
-        newMessage = newMessage.replaceAll("\\$\\*", "</b>"); //assymetric so start and end trigger are different
+        newMessage = newMessage.replaceAll("\\$\\*", "</b>"); //asymetric so start and end trigger are different
 
         // italic
         newMessage = newMessage.replaceAll("/\\$", "<i>"); //replaces each commandtrigger with the wrapper for the font type
-        newMessage = newMessage.replaceAll("\\$/", "</i>"); //assymetric so start and end trigger are different
+        newMessage = newMessage.replaceAll("\\$/", "</i>"); //asymetric so start and end trigger are different
 
         // underline
         newMessage = newMessage.replaceAll("_\\$", "<u>"); //replaces each commandtrigger with the wrapper for the font type
-        newMessage = newMessage.replaceAll("\\$_", "</u>"); //assymetric so start and end trigger are different
+        newMessage = newMessage.replaceAll("\\$_", "</u>"); //asymetric so start and end trigger are different
 
         // red
         newMessage = newMessage.replaceAll("r\\$", "<font color= red>"); //replaces each commandtrigger with the wrapper for the color
-        newMessage = newMessage.replaceAll("\\$r", "</font>"); //assymetric so start and end trigger are different
+        newMessage = newMessage.replaceAll("\\$r", "</font>"); //asymetric so start and end trigger are different
 
         // green
         newMessage = newMessage.replaceAll("g\\$", "<font color= green>"); //replaces each commandtrigger with the wrapper for the color
-        newMessage = newMessage.replaceAll("\\$g", "</font>"); //assymetric so start and end trigger are different
+        newMessage = newMessage.replaceAll("\\$g", "</font>"); //asymetric so start and end trigger are different
 
         // blue
         newMessage = newMessage.replaceAll("b\\$", "<font color= blue>"); //replaces each commandtrigger with the wrapper for the color
-        newMessage = newMessage.replaceAll("\\$b", "</font>"); //assymetric so start and end trigger are different
+        newMessage = newMessage.replaceAll("\\$b", "</font>"); //asymetric so start and end trigger are different
 
         return (newMessage);
     }
