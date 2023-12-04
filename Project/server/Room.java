@@ -100,6 +100,14 @@ public class Room implements AutoCloseable {
         }
     }
 
+    private ServerThread getclientById(long id) { // par36 11/29/23 - Created to get a user's serverthread information by ID
+        return clients.stream().filter(c->c.getClientId() == id).toList().get(0); 
+    }
+
+    private ServerThread getClientByName(String name) { // par36 11/27/23 - Created to get a user's serverthread information by name
+        return clients.stream().filter(c -> c.getClientName().equalsIgnoreCase(name.trim())).toList().get(0); 
+    }
+
     /***
      * Helper function to process messages to trigger different functionality.
      * 
@@ -172,11 +180,19 @@ public class Room implements AutoCloseable {
                         String muteTarget = ""; // holds the name of the muted person
                         muteTarget = comm2[1]; // defines the name based on what comes after the command
                         client.mute(muteTarget); // adds the target's name to the mutelist
+                        if(client == muteTarget) { // par36 11/27/23 - Sends the person a message they were muted
+                        String muteMessage = "*$" + sender.getClientName + "muted you" + "$*"; 
+                        sendMessage(client, muteMessage); 
+                        }
                         break;
                     case "unmute": // par36 11/21/23 - Unmute command
                         String unmuteTarget = ""; // holds the name of the unmuted person
                         unmuteTarget = comm2[1]; // defines the name based on what comes after the command
                         client.unmute(unmuteTarget); // removes the target's name from the mutelist
+                        if(client == unmuteTarget) { // par36 11/27/23 - Sends the person a message they were unmuted
+                        String unmuteMessage = "*$" + sender.getClientName + "unmuted you" + "$*"; 
+                        sendMessage(client, unmuteMessage);
+                        }
                         break;
                     default:
                         wasCommand = false;
@@ -319,6 +335,11 @@ public class Room implements AutoCloseable {
         logger.info(String.format("Removed client %s", client.getClientName()));
         sendMessage(null, client.getClientName() + " disconnected");
         checkClients();
+    }
+
+    protected void mutedMessage(ServerThread muter, String user) {
+        ServerThread target = getClientByName(user);
+        target.sendMessage(muter.getClientId(), " muted you"); 
     }
 
     public void close() {

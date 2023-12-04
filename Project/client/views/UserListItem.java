@@ -1,10 +1,8 @@
 package Project.client.views;
 
 import java.awt.Color;
-
 import javax.swing.JEditorPane;
 import javax.swing.JPanel;
-
 import Project.client.ClientUtils;
 
 public class UserListItem extends JPanel {
@@ -30,6 +28,12 @@ public class UserListItem extends JPanel {
 
     public long getClientId() {
         return clientId;
+    }
+
+    public void mutedClient() {
+        if(User == isMuted) {
+            clientName = "*$" + clientName + "$*"; 
+        }
     }
 
     public void setSeeker(long clientId) {
