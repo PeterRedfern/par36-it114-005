@@ -14,6 +14,8 @@ import java.awt.event.ContainerListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
+import java.io.File; // par36 12/6/23 - Imported to work with files for fileWriter
+import java.io.FileWriter; // par36 12/6/23 - Imported for fileWriter to write export chat history
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -61,6 +63,7 @@ public class ChatPanel extends JPanel {
         JTextField textValue = new JTextField();
         input.add(textValue);
         JButton button = new JButton("Send");
+        JButton export = new JButton("Export Chat");
         // lets us submit with the enter key instead of just the button click
         textValue.addKeyListener(new KeyListener() {
 
@@ -106,6 +109,7 @@ public class ChatPanel extends JPanel {
         userListPanel = new UserListPanel(controls);
         this.add(userListPanel, BorderLayout.EAST);
         this.add(input, BorderLayout.SOUTH);
+        this.add(export, BorderLayout.NORTH); // par36 12/6/23 - adds the export button at the top of the chat
         this.setName(Card.CHAT.name());
         controls.addPanel(Card.CHAT.name(), this);
         chatArea.addContainerListener(new ContainerListener() {
@@ -173,12 +177,21 @@ public class ChatPanel extends JPanel {
         });
     }
 
+    export.addActionListener((event) -> { // par36 12/6/23 - export chat method (work in progress)
+            {
+            try {
+            fileWriter = new FileWriter (clientName + ".txt"); fileWriter.write (chatArea.getText());
+            }
+            fileWriter.close();
+            }
+            });
+
     public UserListPanel getUserListPanel() {
         return userListPanel;
     }
 
     public void highlightUser(long clientId) { // par36 12/6/23 - highlights the user that speaks last/isMuted
-        UserListPanel.muteUserListNameRefresh(clientId); 
+        UserListPanel.muteUserListNameRefresh(clientId);
     }
 
     private void doResize() {
@@ -264,8 +277,7 @@ public class ChatPanel extends JPanel {
     public void addText(String text, Color color) {
         JPanel content = chatArea;
         // add message
-        JEditorPane textContainer = new JEditorPane("text/html", text); // par36 11/17/23 - Changed to "text/html" to
-                                                                        // process new fonts
+        JEditorPane textContainer = new JEditorPane("text/html", text); // par36 11/17/23 - Changed to "text/html" to process new fonts
         // sizes the panel to attempt to take up the width of the container
         // and expand in height based on word wrapping
         textContainer.setLayout(null);
