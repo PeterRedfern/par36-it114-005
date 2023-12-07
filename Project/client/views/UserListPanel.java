@@ -14,6 +14,7 @@ import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 
 import Project.client.ICardControls;
+import Project.common.TextFX.Color;
 
 public class UserListPanel extends JPanel {
     JPanel userListArea;
@@ -45,16 +46,18 @@ public class UserListPanel extends JPanel {
             @Override
             public void componentAdded(ContainerEvent e) {
                 if (userListArea.isVisible()) {
-                    userListArea.revalidate();
-                    userListArea.repaint();
+                    resizeUserListItems();
+                    // userListArea.revalidate();
+                    // userListArea.repaint();
                 }
             }
 
             @Override
             public void componentRemoved(ContainerEvent e) {
                 if (userListArea.isVisible()) {
-                    userListArea.revalidate();
-                    userListArea.repaint();
+                    resizeUserListItems();
+                    // userListArea.revalidate();
+                    // userListArea.repaint();
                 }
             }
 
@@ -96,6 +99,16 @@ public class UserListPanel extends JPanel {
         content.add(uli);
 
     }
+
+    protected static void muteUserListNameRefresh(long clientId) {
+        logger.log(Level.INFO, "changing user list item for color " + clientId);
+        Component[] cs = userListArea.getComponents();
+        for (Component c : cs) {
+            boolean isUser = c.getName().equals(clientId + "");
+            ((JEditorPane) c).setForeground((isUser ? Color.YELLOW : Color.BLACK)); // par36 12/6/23 - sets the user's name to a different color by using setMute
+        }
+    }
+
 
     protected void removeUserListItem(long clientId) {
         logger.log(Level.INFO, "removing user list item for id " + clientId);

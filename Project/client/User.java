@@ -25,8 +25,4 @@ public class User {
         this.clientId = clientId;
         this.clientName = clientName;
     }
-
-    public boolean isMuted(String name) { // par36 11/27/23 - isMuted method
-        return muteList.contains(name);   // returns true or false if someone's name is in the mutelist or not
-    }
 }

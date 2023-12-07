@@ -122,6 +122,7 @@ public class ChatPanel extends JPanel {
                      * solves this.
                      */
                     JScrollBar vertical = ((JScrollPane) chatArea.getParent().getParent()).getVerticalScrollBar();
+                    vertical.setValue(vertical.getMaximum());
                     AdjustmentListener scroller = new AdjustmentListener() {
                         @Override
                         public void adjustmentValueChanged(AdjustmentEvent e) {
@@ -174,6 +175,10 @@ public class ChatPanel extends JPanel {
 
     public UserListPanel getUserListPanel() {
         return userListPanel;
+    }
+
+    public void highlightUser(long clientId) { // par36 12/6/23 - highlights the user that speaks last/isMuted
+        UserListPanel.muteUserListNameRefresh(clientId); 
     }
 
     private void doResize() {
@@ -259,7 +264,8 @@ public class ChatPanel extends JPanel {
     public void addText(String text, Color color) {
         JPanel content = chatArea;
         // add message
-        JEditorPane textContainer = new JEditorPane("text/html", text); // par36 11/17/23 - Changed to "text/html" to process new fonts
+        JEditorPane textContainer = new JEditorPane("text/html", text); // par36 11/17/23 - Changed to "text/html" to
+                                                                        // process new fonts
         // sizes the panel to attempt to take up the width of the container
         // and expand in height based on word wrapping
         textContainer.setLayout(null);

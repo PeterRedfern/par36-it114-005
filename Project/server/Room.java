@@ -180,19 +180,19 @@ public class Room implements AutoCloseable {
                         String muteTarget = ""; // holds the name of the muted person
                         muteTarget = comm2[1]; // defines the name based on what comes after the command
                         client.mute(muteTarget); // adds the target's name to the mutelist
-                        if(client == muteTarget) { // par36 11/27/23 - Sends the person a message they were muted
-                        String muteMessage = "*$" + sender.getClientName + "muted you" + "$*"; 
-                        sendMessage(client, muteMessage); 
-                        }
+                        // par36 11/27/23 - Sends the person a message they were muted
+                        ServerThread target = getClientByName(muteTarget); // par36 12/4/23 - Gets the name of the target
+                        target.sendMessage(Constants.DEFAULT_CLIENT_ID, client.getClientName() + " muted you"); // tells the target they were muted
+                        client.sendMessage(Constants.DEFAULT_CLIENT_ID, "You muted " + muteTarget); // tells the user who they muted
                         break;
                     case "unmute": // par36 11/21/23 - Unmute command
                         String unmuteTarget = ""; // holds the name of the unmuted person
                         unmuteTarget = comm2[1]; // defines the name based on what comes after the command
                         client.unmute(unmuteTarget); // removes the target's name from the mutelist
-                        if(client == unmuteTarget) { // par36 11/27/23 - Sends the person a message they were unmuted
-                        String unmuteMessage = "*$" + sender.getClientName + "unmuted you" + "$*"; 
-                        sendMessage(client, unmuteMessage);
-                        }
+                        // par36 11/27/23 - Sends the person a message they were unmuted
+                        ServerThread target2 = getClientByName(unmuteTarget); // par36 12/4/23 - Gets the name of the target
+                        target2.sendMessage(Constants.DEFAULT_CLIENT_ID, client.getClientName() + " unmuted you"); // tells the target they were unmuted
+                        client.sendMessage(Constants.DEFAULT_CLIENT_ID, "You unmuted " + unmuteTarget); // tells the user who they unmuted
                         break;
                     default:
                         wasCommand = false;
