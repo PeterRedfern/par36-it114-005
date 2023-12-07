@@ -8,6 +8,9 @@ import java.net.Socket;
 import java.util.ArrayList; // par36 11/21/23 - added for mutelist function
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.io.FileWriter; // par36 12/7/23 - Used to write MuteList to file
+import java.io.File; // par36 12/7/23 - Used to work with files
+import java.util.Scanner; // par36 12/7/23 - Used to take information from the files
 
 import Project.common.Constants;
 import Project.common.Payload;
@@ -17,7 +20,7 @@ import Project.common.RoomResultPayload;
 /**
  * A server-side representation of a single client
  */
-public class ServerThread extends Thread {
+public class ServerThread extends Thread { 
     protected Socket client;
     private String clientName;
     private boolean isRunning = false;
@@ -49,7 +52,36 @@ public class ServerThread extends Thread {
         setCurrentRoom(room);
 
     }
+    
+    /*
+    protected void muteListText() {
+        try {
+            String filename; 
+            filename = clientName + "muteList.txt";
+            FileWriter writer = new FileWriter(filename);
+            // File file = new File(filename); 
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } 
+    }
 
+    protected void loadMuteList(FileWriter writer, List<String> muteList) {
+        Scanner scan = new Scanner(System.in);
+        File file = new File(clientName); 
+        try (Scanner reader = new Scanner(file)) {
+            int lineNumber = 0;
+            while (reader.hasNextLine()) {
+                String text = reader.nextLine();
+                if (lineNumber == 1) {
+                    String[] data = text.split(",");
+            } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            } 
+        }
+    }*/
+ 
     protected void mute(String name) { // par36 11/21/23 - mute method
         if(!muteList.contains(name)) { // if the mutelist doesn't have the name of the muted person
             muteList.add(name);        // it then adds the name to the list
@@ -90,7 +122,7 @@ public class ServerThread extends Thread {
     }
 
     public void disconnect() {
-        sendConnectionStatus(myClientId, getClientName(), false);
+        sendConnectionStatus(myClientId, getClientName(), false); 
         logger.info("Thread being disconnected by server");
         isRunning = false;
         cleanup();
@@ -188,8 +220,7 @@ public class ServerThread extends Thread {
             isRunning = true;
             Payload fromClient;
             while (isRunning && // flag to let us easily control the loop
-                    (fromClient = (Payload) in.readObject()) != null // reads an object from inputStream (null would
-                                                                     // likely mean a disconnect)
+                    (fromClient = (Payload) in.readObject()) != null // reads an object from inputStream (null would likely mean a disconnect)
             ) {
 
                 logger.info("Received from client: " + fromClient);

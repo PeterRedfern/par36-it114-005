@@ -1,6 +1,7 @@
 package Project.client.views;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ContainerEvent;
@@ -12,9 +13,9 @@ import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.JEditorPane; // par36 12/7/23 - Imported to work with client highlight changes
 
 import Project.client.ICardControls;
-import Project.common.TextFX.Color;
 
 public class UserListPanel extends JPanel {
     JPanel userListArea;
@@ -97,18 +98,15 @@ public class UserListPanel extends JPanel {
          * uli.getBorder()));
          */
         content.add(uli);
-
     }
-
-    protected static void muteUserListNameRefresh(long clientId) {
-        logger.log(Level.INFO, "changing user list item for color " + clientId);
-        Component[] cs = userListArea.getComponents();
-        for (Component c : cs) {
+    
+    protected void muteUserListNameRefresh(long clientId) {
+        logger.log(Level.INFO, "removing user list item for id" + clientId);
+        Component[] cs = userListArea.getComponents(); for (Component c : cs) {
             boolean isUser = c.getName().equals(clientId + "");
-            ((JEditorPane) c).setForeground((isUser ? Color.YELLOW : Color.BLACK)); // par36 12/6/23 - sets the user's name to a different color by using setMute
+            ((JEditorPane) c).setForeground((isUser ? Color.YELLOW : Color.black)); // par36 12/6/23 - sets the user's name to a different color by using setMute
         }
     }
-
 
     protected void removeUserListItem(long clientId) {
         logger.log(Level.INFO, "removing user list item for id " + clientId);
