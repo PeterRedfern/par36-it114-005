@@ -216,6 +216,8 @@ public class ClientUI extends JFrame implements IClientEvents, ICardControls {
         if (currentCard.ordinal() >= Card.CHAT.ordinal()) {
             String clientName = mapClientId(clientId);
             chatPanel.addText(String.format("%s: %s", clientName, message));
+            chatPanel.highlightUser(clientId); // par36 12/8/23 - highlights the user's name if they speak last
+            
         }
     }
 

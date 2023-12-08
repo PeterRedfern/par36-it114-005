@@ -112,7 +112,7 @@ public class ChatPanel extends JPanel {
         this.setName(Card.CHAT.name());
         controls.addPanel(Card.CHAT.name(), this);
 
-        export.addActionListener((event) -> { // par36 12/6/23 - export chat method
+        export.addActionListener((event) -> { // par36 12/7/23 - export chat method
             {
                 try {
                     FileWriter fileWriter = new FileWriter("exportFile.html");
@@ -193,7 +193,7 @@ public class ChatPanel extends JPanel {
     }
 
     public void highlightUser(long clientId) { // par36 12/6/23 - highlights the user that speaks last/isMuted
-        userListPanel.muteUserListNameRefresh(clientId);
+        userListPanel.userListNameRefresh(clientId);
     }
 
     private void doResize() {
@@ -276,12 +276,13 @@ public class ChatPanel extends JPanel {
         addText(text, Color.BLACK);
     }
 
-    public String getChatHistory() {
+    public String getChatHistory() { // par36 12/7/23 - created to get chatHistory for export function
         StringBuilder builder = new StringBuilder();
         Component[] cs = chatArea.getComponents();
         for (Component c : cs) {
             String m = ((JEditorPane) c).getText();
             builder.append(m);
+            builder.append("<br />");
         }
         return builder.toString();
     }
@@ -289,8 +290,7 @@ public class ChatPanel extends JPanel {
     public void addText(String text, Color color) {
         JPanel content = chatArea;
         // add message
-        JEditorPane textContainer = new JEditorPane("text/html", text); // par36 11/17/23 - Changed to "text/html" to
-                                                                        // process new fonts
+        JEditorPane textContainer = new JEditorPane("text/html", text); // par36 11/17/23 - Changed to "text/html" to process new fonts
         // sizes the panel to attempt to take up the width of the container
         // and expand in height based on word wrapping
         textContainer.setLayout(null);

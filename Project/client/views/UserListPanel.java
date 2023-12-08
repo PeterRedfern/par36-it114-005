@@ -100,11 +100,20 @@ public class UserListPanel extends JPanel {
         content.add(uli);
     }
     
-    protected void muteUserListNameRefresh(long clientId) {
+    protected void userListNameRefresh(long clientId) {
         logger.log(Level.INFO, "removing user list item for id" + clientId);
         Component[] cs = userListArea.getComponents(); for (Component c : cs) {
             boolean isUser = c.getName().equals(clientId + "");
-            ((JEditorPane) c).setForeground((isUser ? Color.YELLOW : Color.black)); // par36 12/6/23 - sets the user's name to a different color by using setMute
+            ((UserListItem) c).setColor((isUser ? Color.YELLOW : Color.black)); // par36 12/6/23 - sets the user's name to yellow for last message sent
+        }
+    }
+
+    protected void userListNameRefreshMute(long clientId) {
+        logger.log(Level.INFO, "removing user list item for id" + clientId);
+        Component[] cs = userListArea.getComponents(); for (Component c : cs) {
+            boolean isUser = c.getName().equals(clientId + "");
+            //boolean isMuted = true;
+            ((UserListItem) c).setColor((isUser ? Color.RED : Color.black)); // par36 12/6/23 - sets the user's name to yellow for last message sent
         }
     }
 
