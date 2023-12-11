@@ -13,7 +13,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
-import javax.swing.JEditorPane; // par36 12/7/23 - Imported to work with client highlight changes
+//import javax.swing.JEditorPane; // par36 12/7/23 - Imported to work with client highlight changes
 
 import Project.client.ICardControls;
 
@@ -101,7 +101,7 @@ public class UserListPanel extends JPanel {
     }
     
     protected void userListNameRefresh(long clientId) {
-        logger.log(Level.INFO, "removing user list item for id" + clientId);
+        logger.log(Level.INFO, "updating the color of the client's name on userListPanel when they send a message" + clientId);
         Component[] cs = userListArea.getComponents(); for (Component c : cs) {
             boolean isUser = c.getName().equals(clientId + "");
             ((UserListItem) c).setColor((isUser ? Color.YELLOW : Color.black)); // par36 12/6/23 - sets the user's name to yellow for last message sent
@@ -109,11 +109,11 @@ public class UserListPanel extends JPanel {
     }
 
     protected void userListNameRefreshMute(long clientId) {
-        logger.log(Level.INFO, "removing user list item for id" + clientId);
+        logger.log(Level.INFO, "updating the color of the client's name on userListPanel when muted" + clientId);
         Component[] cs = userListArea.getComponents(); for (Component c : cs) {
             boolean isUser = c.getName().equals(clientId + "");
             //boolean isMuted = true;
-            ((UserListItem) c).setColor((isUser ? Color.RED : Color.black)); // par36 12/6/23 - sets the user's name to yellow for last message sent
+            ((UserListItem) c).setColor((isUser ? Color.RED : Color.black)); // par36 12/6/23 - sets the user's name to red when muted by another user
         }
     }
 

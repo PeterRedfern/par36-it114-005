@@ -11,7 +11,6 @@ import java.util.logging.Logger;
 import java.io.FileWriter; // par36 12/7/23 - Used to write MuteList to file
 import java.io.File; // par36 12/7/23 - Used to work with files
 import java.util.Scanner; // par36 12/7/23 - Used to take information from the files
-
 import Project.common.Constants;
 import Project.common.Payload;
 import Project.common.PayloadType;
@@ -20,7 +19,7 @@ import Project.common.RoomResultPayload;
 /**
  * A server-side representation of a single client
  */
-public class ServerThread extends Thread { 
+public class ServerThread extends Thread {
     protected Socket client;
     private String clientName;
     private boolean isRunning = false;
@@ -52,48 +51,56 @@ public class ServerThread extends Thread {
         setCurrentRoom(room);
 
     }
-    
-    /*
-    protected void muteListText() {
+
+    public void muteListText() { // par36 12/10/23 - Writes the muteList to a file
         try {
-            String filename; 
-            filename = clientName + "muteList.txt";
-            FileWriter writer = new FileWriter(filename);
-            // File file = new File(filename); 
+            Scanner scanner = new Scanner(new File(fileName())); // gets the name for the file from the fileName method, uses the user's name
+            String muteNameList = scanner.nextLine(); // scans in the names entered to the stringArray
+            String[] nameListData = muteNameList.substring(1, muteNameList.length() - 1).split(","); // puts a comma at the end of each name and seperates them 
+            for(String people: nameListData) { // for each person in the StringArray
+                muteList.add(people.trim()); // add them to the muteList (.trim to remove any spaces)
+            }
+            scanner.close();
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        } 
+        }
     }
 
-    protected void loadMuteList(FileWriter writer, List<String> muteList) {
-        Scanner scan = new Scanner(System.in);
-        File file = new File(clientName); 
-        try (Scanner reader = new Scanner(file)) {
-            int lineNumber = 0;
-            while (reader.hasNextLine()) {
-                String text = reader.nextLine();
-                if (lineNumber == 1) {
-                    String[] data = text.split(",");
-            } catch (IOException e) {
+    private String fileName() { // par36 12/10/23 - fileName for muteList
+        String client = getClientName(); // gets the client's name
+        String fileName = "Project/server/mute/" + client + "'s Mutelist.txt"; // uses their name to create and identify their list
+        return fileName;
+    }
+
+    private void newMuteList() { // par36 12/10/23 - updates the muteList 
+        FileWriter editedNameList; // creates a new fileWriter for the updates to the muteList
+        try {
+            editedNameList = new FileWriter(fileName()); 
+            editedNameList.write(muteList.toString()); // writes new changes to the muteList
+            editedNameList.close(); // closes the fileWriter
+        } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-            } 
-        }
-    }*/
- 
-    protected void mute(String name) { // par36 11/21/23 - mute method
-        if(!muteList.contains(name)) { // if the mutelist doesn't have the name of the muted person
-            muteList.add(name);        // it then adds the name to the list
         }
     }
 
-    protected void unmute(String name) { // par36 11/21/23 - unmute method
-        muteList.remove(name);           // removes the user from the mutelist which unmutes them
+    protected void mute(String name) { // par36 11/21/23 - mute method
+        if (!muteList.contains(name)) { // if the mutelist doesn't have the name of the muted person
+            muteList.add(name); // it then adds the name to the list
+            newMuteList(); 
+        }
+    }
+
+    protected void unmute(String name) { // par36 12/10/23 - unmute method (updated)
+        if (muteList.contains(name)) { // if the mutelist has the name of the muted person
+            muteList.remove(name); // it removes the name from the list (unmuting them)
+            newMuteList(); 
+        }
     }
 
     protected boolean isMuted(String name) { // par36 11/21/23 - isMuted method
-        return muteList.contains(name);      // returns true or false if someone's name is in the mutelist or not
+        return muteList.contains(name); // returns true or false if someone's name is in the mutelist or not
     }
 
     protected void setClientName(String name) {
@@ -122,7 +129,7 @@ public class ServerThread extends Thread {
     }
 
     public void disconnect() {
-        sendConnectionStatus(myClientId, getClientName(), false); 
+        sendConnectionStatus(myClientId, getClientName(), false);
         logger.info("Thread being disconnected by server");
         isRunning = false;
         cleanup();

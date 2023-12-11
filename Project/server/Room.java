@@ -100,7 +100,7 @@ public class Room implements AutoCloseable {
         }
     }
 
-    /*private ServerThread getclientById(long id) { // par36 11/29/23 - Created to get a user's serverthread information by ID
+    /*private ServerThread getclientById(long id) { // par36 11/29/23 - Created to get a user's serverthread information by ID (not used)
         return clients.stream().filter(c->c.getClientId() == id).toList().get(0); 
     }
     */
