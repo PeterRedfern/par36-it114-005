@@ -88,6 +88,10 @@ public class ServerThread extends Thread {
     protected void mute(String name) { // par36 11/21/23 - mute method
         if (!muteList.contains(name)) { // if the mutelist doesn't have the name of the muted person
             muteList.add(name); // it then adds the name to the list
+            ServerThread target = currentRoom.getClientByName(name); 
+            if(target != null) {
+                sendMute(target.getClientId()); 
+            }
             newMuteList(); 
         }
     }
@@ -95,6 +99,10 @@ public class ServerThread extends Thread {
     protected void unmute(String name) { // par36 12/10/23 - unmute method (updated)
         if (muteList.contains(name)) { // if the mutelist has the name of the muted person
             muteList.remove(name); // it removes the name from the list (unmuting them)
+            ServerThread target = currentRoom.getClientByName(name); 
+            if(target != null) {
+                sendUnmute(target.getClientId()); 
+            }
             newMuteList(); 
         }
     }
@@ -197,6 +205,22 @@ public class ServerThread extends Thread {
         return send(p);
     }
 
+    public boolean sendMute(long clientId) {
+        Payload p = new Payload();
+        p.setPayloadType(PayloadType.MUTED);
+        p.setClientId(clientId);
+        p.setMessage(clientName + " muted someone");
+        return send(p); 
+    }
+
+    public boolean sendUnmute(long clientId) {
+        Payload p = new Payload();
+        p.setPayloadType(PayloadType.UNMUTED);
+        p.setClientId(clientId);
+        p.setMessage(clientName + " unmuted someone");
+        return send(p); 
+    }
+
     private boolean send(Payload payload) {
         try {
             logger.log(Level.FINE, "Outgoing payload: " + payload);
@@ -273,6 +297,14 @@ public class ServerThread extends Thread {
             case JOIN_ROOM:
                 Room.joinRoom(p.getMessage().trim(), this);
                 break;
+            /* 
+            case MUTED:
+                currentRoom.sendMute(p.getMessage().trim(), this); 
+                break; 
+            case UNMUTED:
+                sendUnmute(p.getMessage().trim(), this); 
+                break;
+            */
             default:
                 break;
 

@@ -21,6 +21,7 @@ public class UserListItem extends JPanel {
         this.clientName = clientName;
         hostIndicator.setEnabled(false);
         hostIndicator.setVisible(false);
+        hostIndicator.setBackground(Color.YELLOW);
         outIndicator.setEnabled(false);
         outIndicator.setBackground(Color.RED);
         outIndicator.setVisible(false);
@@ -28,7 +29,6 @@ public class UserListItem extends JPanel {
         hostIndicator.setPreferredSize(d);
         hostIndicator.setMinimumSize(d);
         hostIndicator.setMaximumSize(d);
-
         outIndicator.setPreferredSize(d);
         outIndicator.setMinimumSize(d);
         outIndicator.setMaximumSize(d);

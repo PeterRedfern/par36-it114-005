@@ -124,7 +124,6 @@ public class ChatPanel extends JPanel {
             }
         });
         chatArea.addContainerListener(new ContainerListener() {
-
             @Override
             public void componentAdded(ContainerEvent e) {
                 if (chatArea.isVisible()) {
@@ -192,8 +191,12 @@ public class ChatPanel extends JPanel {
         return userListPanel;
     }
 
-    public void highlightUser(long clientId) { // par36 12/6/23 - highlights the user that speaks last/isMuted
-        userListPanel.userListNameRefresh(clientId);
+    public void highlightUser(long clientId) { // par36 12/6/23 - highlights the user that speaks last in yellow
+        userListPanel.userListNameRefresh(clientId); 
+    }
+
+    public void muteHighlight(long clientId) { // par36 12/6/23 - highlights the user that is muted in gray
+        userListPanel.userListNameRefreshMute(clientId); 
     }
 
     private void doResize() {

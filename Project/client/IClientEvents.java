@@ -61,4 +61,18 @@ public interface IClientEvents {
      * @param roomName
      */
     void onRoomJoin(String roomName);
+
+    /**
+     * Triggered when a client is muted
+     * 
+     * @param clientId
+     */
+    void onMute(long clientId);
+
+    /**
+     * Triggered when a client is umuted
+     * 
+     * @param clientId
+     */
+    void onUnmute(long clientId); 
 }

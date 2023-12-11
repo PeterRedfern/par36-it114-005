@@ -105,7 +105,7 @@ public class Room implements AutoCloseable {
     }
     */
 
-    private ServerThread getClientByName(String name) { // par36 11/27/23 - Created to get a user's serverthread information by name
+    protected ServerThread getClientByName(String name) { // par36 11/27/23 - Created to get a user's serverthread information by name
         return clients.stream().filter(c -> c.getClientName().equalsIgnoreCase(name.trim())).toList().get(0); 
     }
 

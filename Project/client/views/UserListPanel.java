@@ -112,8 +112,7 @@ public class UserListPanel extends JPanel {
         logger.log(Level.INFO, "updating the color of the client's name on userListPanel when muted" + clientId);
         Component[] cs = userListArea.getComponents(); for (Component c : cs) {
             boolean isUser = c.getName().equals(clientId + "");
-            //boolean isMuted = true;
-            ((UserListItem) c).setColor((isUser ? Color.RED : Color.black)); // par36 12/6/23 - sets the user's name to red when muted by another user
+            ((UserListItem) c).setColor((isUser ? Color.GRAY : Color.black)); // par36 12/11/23 - sets the user's name to gray when muted by another user
         }
     }
 

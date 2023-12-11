@@ -256,11 +256,20 @@ public enum Client {
                 userList.clear();
                 listeners.forEach(l -> l.onResetUserList());
                 break;
+            case MUTED:
+                listeners.forEach(e -> {
+                    e.onMute(p.getClientId()); 
+                }); 
+                break; 
+            case UNMUTED:  
+                listeners.forEach(e -> {
+                    e.onUnmute(p.getClientId()); 
+                });
+                break; 
             default:
                 logger.warning(Constants.ANSI_RED + String.format("Unhandled Payload type: %s", p.getPayloadType())
                         + Constants.ANSI_RESET);
                 break;
-
         }
     } catch (Exception e) {
         logger.severe("Payload handling problem");
