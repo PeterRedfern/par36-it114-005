@@ -28,7 +28,6 @@ public enum Client {
     private Thread fromServerThread;
     private String clientName = "";
     private long myClientId = Constants.DEFAULT_CLIENT_ID;
-    private boolean isSeeker = false;
     private static Logger logger = Logger.getLogger(Client.class.getName());
 
     private Hashtable<Long, String> userList = new Hashtable<Long, String>();
@@ -44,10 +43,6 @@ public enum Client {
         // if the server had a problem
         return server.isConnected() && !server.isClosed() && !server.isInputShutdown() && !server.isOutputShutdown();
 
-    }
-
-    public boolean isSeeker() {
-        return isSeeker;
     }
 
     public void addListener(IClientEvents listener) {
@@ -205,7 +200,6 @@ public enum Client {
                 removeClient(p.getClientId());
                 if (p.getClientId() == myClientId) {
                     myClientId = Constants.DEFAULT_CLIENT_ID;
-                    isSeeker = false;
                 }
                 logger.info(String.format("*%s %s*",
                         p.getClientName(),

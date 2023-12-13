@@ -192,11 +192,11 @@ public class ChatPanel extends JPanel {
     }
 
     public void highlightUser(long clientId) { // par36 12/6/23 - highlights the user that speaks last in yellow
-        userListPanel.userListNameRefresh(clientId); 
+        userListPanel.userListNameRefresh(clientId);
     }
 
     public void muteHighlight(long clientId) { // par36 12/6/23 - highlights the user that is muted in gray
-        userListPanel.userListNameRefreshMute(clientId); 
+        userListPanel.userListNameRefreshMute(clientId);
     }
 
     private void doResize() {
