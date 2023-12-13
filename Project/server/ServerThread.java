@@ -56,9 +56,12 @@ public class ServerThread extends Thread {
         try {
             Scanner scanner = new Scanner(new File(fileName())); // gets the name for the file from the fileName method, uses the user's name
             String muteNameList = scanner.nextLine(); // scans in the names entered to the stringArray
-            String[] nameListData = muteNameList.substring(1, muteNameList.length() - 1).split(","); // puts a comma at the end of each name and seperates them 
+            muteNameList = muteNameList.replace("[","").replace("]","");
+            String[] nameListData = muteNameList.split(","); // puts a comma at the end of each name
+            System.out.println(muteNameList);
             for(String people: nameListData) { // for each person in the StringArray
                 muteList.add(people.trim()); // add them to the muteList (.trim to remove any spaces)
+                System.out.println(people);
             }
             scanner.close();
         } catch (IOException e) {
@@ -275,6 +278,7 @@ public class ServerThread extends Thread {
         switch (p.getPayloadType()) {
             case CONNECT:
                 setClientName(p.getClientName());
+                muteListText(); // par36 12/12/23 - added to ensure muteLists load at the beggining of a session
                 break;
             case DISCONNECT:
                 Room.disconnectClient(this, getCurrentRoom());

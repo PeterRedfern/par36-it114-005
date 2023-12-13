@@ -104,15 +104,27 @@ public class UserListPanel extends JPanel {
         logger.log(Level.INFO, "updating the color of the client's name on userListPanel when they send a message" + clientId);
         Component[] cs = userListArea.getComponents(); for (Component c : cs) {
             boolean isUser = c.getName().equals(clientId + "");
-            ((UserListItem) c).setColor((isUser ? Color.YELLOW : Color.black)); // par36 12/6/23 - sets the user's name to yellow for last message sent
+            if(((UserListItem) c).getColor() != Color.GRAY) {
+                ((UserListItem) c).setColor((isUser ? Color.YELLOW : Color.black)); // par36 12/6/23 - sets the user's name to yellow for last message sent
+            } 
         }
     }
 
-    protected void userListNameRefreshMute(long clientId) {
+    protected void userListNameRefreshMute(long clientId) { //par36 - based on userListNameRefresh
         logger.log(Level.INFO, "updating the color of the client's name on userListPanel when muted" + clientId);
         Component[] cs = userListArea.getComponents(); for (Component c : cs) {
-            boolean isUser = c.getName().equals(clientId + "");
-            ((UserListItem) c).setColor((isUser ? Color.GRAY : Color.black)); // par36 12/11/23 - sets the user's name to gray when muted by another user
+            if(c.getName().equals(clientId + "")) {
+            ((UserListItem) c).setColor(Color.GRAY); // par36 12/11/23 - sets the user's name to gray when muted by another user
+            }
+        }
+    }
+
+    protected void userListNameRefreshUnmute(long clientId) { // par36 12/12/23 - opposite of userListNameRefreshMute
+        logger.log(Level.INFO, "updating the color of the client's name on userListPanel when unmuted" + clientId);
+        Component[] cs = userListArea.getComponents(); for (Component c : cs) {
+            if(c.getName().equals(clientId + "")) {
+            ((UserListItem) c).setColor(Color.BLACK); // par36 12/12/23 - sets the user's name to black when unmuted by another user
+            }
         }
     }
 

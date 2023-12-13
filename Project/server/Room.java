@@ -195,6 +195,13 @@ public class Room implements AutoCloseable {
                         target2.sendMessage(Constants.DEFAULT_CLIENT_ID, client.getClientName() + " unmuted you"); // tells the target they were unmuted
                         client.sendMessage(Constants.DEFAULT_CLIENT_ID, "You unmuted " + unmuteTarget); // tells the user who they unmuted
                         break;
+                    case "help": // par36 12/12/23 - Help command (not required)
+                        String helpT = "";
+                        helpT = client.getClientName(); 
+                        String helpMessage = "Hello! Here are the commands: /roll (number) or (#d#), /flip, /mute (user), /unmute (user). " + 
+                        "Formatting for text: Bold: *$(Text)$* Italic: /$(Text)$/ Underline: _$(Text)$_ Color: (r/g/b$(Text)$b/g/r)"; 
+                        ServerThread helpTarget = getClientByName(helpT); 
+                        helpTarget.sendMessage(Constants.DEFAULT_CLIENT_ID, helpMessage);
                     default:
                         wasCommand = false;
                         break;

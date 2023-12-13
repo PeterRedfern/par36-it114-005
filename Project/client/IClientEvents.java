@@ -67,12 +67,12 @@ public interface IClientEvents {
      * 
      * @param clientId
      */
-    void onMute(long clientId);
+    void onMute(long clientId); // par36 12/12/23 - created to process mute
 
     /**
      * Triggered when a client is umuted
      * 
      * @param clientId
      */
-    void onUnmute(long clientId); 
+    void onUnmute(long clientId); // par36 12/12/23 - created to process unmute
 }

@@ -265,16 +265,16 @@ public class ClientUI extends JFrame implements IClientEvents, ICardControls {
     }
 
     @Override
-    public void onMute(long clientId) {
+    public void onMute(long clientId) { // par36 12/12/23 - added to update user's name to gray when muted in the UI
         if (currentCard.ordinal() >= Card.CHAT.ordinal()) {
-            chatPanel.muteHighlight(clientId);
+            chatPanel.muteHighlight(clientId); 
         }
     }
 
     @Override
-    public void onUnmute(long clientId) {
+    public void onUnmute(long clientId) { // par36 12/12/23 - added to update user's name to normal when unmuted in the UI
         if (currentCard.ordinal() >= Card.CHAT.ordinal()) {
-            chatPanel.muteHighlight(clientId);
+            chatPanel.unmuteHighlight(clientId);
         }
     }
 }

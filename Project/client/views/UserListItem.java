@@ -5,7 +5,7 @@ import java.awt.Dimension;
 
 import javax.swing.JButton;
 import javax.swing.JEditorPane;
-import javax.swing.JPanel; 
+import javax.swing.JPanel;
 
 import Project.client.ClientUtils;
 public class UserListItem extends JPanel {
@@ -17,7 +17,7 @@ public class UserListItem extends JPanel {
 
     public UserListItem(String clientName, long clientId) {
         this.clientId = clientId;
-        this.setName(clientId+"");
+        this.setName(clientId + "");
         this.clientName = clientName;
         hostIndicator.setEnabled(false);
         hostIndicator.setVisible(false);
@@ -50,7 +50,11 @@ public class UserListItem extends JPanel {
         return clientId;
     }
 
-    public void setColor(Color Color) { // par36 12/8/23 - Changes the user's name to a different color 
-        text.setForeground(Color); 
+    public void setColor(Color Color) { // par36 12/8/23 - Changes the user's name to a different color
+        text.setForeground(Color);
+    }
+
+    public Color getColor() { // par36 12/12/23 - Getter for color
+        return text.getForeground();
     }
 }

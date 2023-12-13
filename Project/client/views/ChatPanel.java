@@ -115,7 +115,7 @@ public class ChatPanel extends JPanel {
         export.addActionListener((event) -> { // par36 12/7/23 - export chat method
             {
                 try {
-                    FileWriter fileWriter = new FileWriter("exportFile.html");
+                    FileWriter fileWriter = new FileWriter("exportFile.html"); //writes the output of the chat to an HTML file
                     fileWriter.write(getChatHistory());
                     fileWriter.close();
                 } catch (Exception e) {
@@ -197,6 +197,10 @@ public class ChatPanel extends JPanel {
 
     public void muteHighlight(long clientId) { // par36 12/6/23 - highlights the user that is muted in gray
         userListPanel.userListNameRefreshMute(clientId);
+    }
+
+    public void unmuteHighlight(long clientId) { // par36 12/12/23 - the user that is unmuted reverts to normal color
+        userListPanel.userListNameRefreshUnmute(clientId);
     }
 
     private void doResize() {

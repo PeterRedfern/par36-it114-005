@@ -250,12 +250,12 @@ public enum Client {
                 userList.clear();
                 listeners.forEach(l -> l.onResetUserList());
                 break;
-            case MUTED:
+            case MUTED: // par36 12/12/23 - added to process mute client
                 listeners.forEach(e -> {
                     e.onMute(p.getClientId()); 
                 }); 
                 break; 
-            case UNMUTED:  
+            case UNMUTED: // par36 12/12/23 - added to process unmute client
                 listeners.forEach(e -> {
                     e.onUnmute(p.getClientId()); 
                 });
