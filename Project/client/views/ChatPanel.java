@@ -17,6 +17,8 @@ import java.io.IOException;
 import java.io.FileWriter; // par36 12/6/23 - Imported for fileWriter to write export chat history
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.time.LocalDate; // par36 12/12/23 - imported for date in export file name
+import java.time.LocalTime; // par36 12/12/23 - imported for time in export file name
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -115,7 +117,11 @@ public class ChatPanel extends JPanel {
         export.addActionListener((event) -> { // par36 12/7/23 - export chat method
             {
                 try {
-                    FileWriter fileWriter = new FileWriter("exportFile.html"); //writes the output of the chat to an HTML file
+                    LocalDate date = LocalDate.now(); // par36 12/12/23 - gets the date
+                    LocalTime time = LocalTime.now(); // gets the time 
+                    String timeString = time.toString(); // makes the time message into a String
+                    timeString = timeString.replace(":", "."); // par36 12/12/23 - changes the : in the time message so it can ouput to a file without error
+                    FileWriter fileWriter = new FileWriter("Project/chatexport/" + "ChatExport " + date + " " + timeString + ".html"); //writes the output of the chat to an HTML file
                     fileWriter.write(getChatHistory());
                     fileWriter.close();
                 } catch (Exception e) {
