@@ -100,13 +100,20 @@ public class Room implements AutoCloseable {
         }
     }
 
-    /*private ServerThread getclientById(long id) { // par36 11/29/23 - Created to get a user's serverthread information by ID (not used)
-        return clients.stream().filter(c->c.getClientId() == id).toList().get(0); 
-    }
-    */
+    /*
+     * private ServerThread getclientById(long id) { // par36 11/29/23 - Created to
+     * get a user's serverthread information by ID (not used)
+     * return clients.stream().filter(c->c.getClientId() == id).toList().get(0);
+     * }
+     */
 
-    protected ServerThread getClientByName(String name) { // par36 11/27/23 - Created to get a user's serverthread information by name
-        return clients.stream().filter(c -> c.getClientName().equalsIgnoreCase(name.trim())).toList().get(0); 
+    protected ServerThread getClientByName(String name) {// par36 12/13/23 (updated) - Created to get a user's serverthread information by name
+        try {
+            return clients.stream().filter(c -> c.getClientName().equalsIgnoreCase(name.trim())).toList().get(0);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     /***
@@ -126,7 +133,8 @@ public class Room implements AutoCloseable {
                 String part1 = comm[1];
                 String[] comm2 = part1.split(" ");
                 String command = comm2[0];
-                System.out.println(TextFX.colorize(command, TextFX.Color.RED)); // par36 11/6/23 - Prints out commands in red (in the terminal)
+                System.out.println(TextFX.colorize(command, TextFX.Color.RED)); // par36 11/6/23 - Prints out commands
+                                                                                // in red (in the terminal)
                 String roomName;
                 wasCommand = true;
                 switch (command) {
@@ -145,14 +153,17 @@ public class Room implements AutoCloseable {
                         break;
                     case "flip": // par36 11/6/23 - Flip code
                         Random random = new Random(); // Creates a random object to generate heads or tails
-                        int randomValue = random.nextInt(2); // random number which is generated and used in the if else loop
+                        int randomValue = random.nextInt(2); // random number which is generated and used in the if else
+                                                             // loop
                         String result;
                         if (randomValue == 0) { // If/else loop which checks if the int randomValue is equal to
                             result = "heads"; // 0 and sets the String result to heads or tails
                         } else {
                             result = "tails";
                         }
-                        String coinFlipMessage = "*$" + "Flipped a coin and got " + result + "$*"; // toString for the result to be printed
+                        String coinFlipMessage = "*$" + "Flipped a coin and got " + result + "$*"; // toString for the
+                                                                                                   // result to be
+                                                                                                   // printed
                         sendMessage(client, coinFlipMessage); // Sends the message
                         break;
                     case "roll": // par36 11/8/23 - Roll code
@@ -168,12 +179,16 @@ public class Room implements AutoCloseable {
                                 int min = diceNum;
                                 total = (int) ((Math.random() * (max - min + 1)) + min); // Equation for multiple dice
                             }
-                            String rollMessage = "*$" + "Rolled " + roll + " and got " + total + "$*"; // Message to be sent to all users
+                            String rollMessage = "*$" + "Rolled " + roll + " and got " + total + "$*"; // Message to be
+                                                                                                       // sent to all
+                                                                                                       // users
                             sendMessage(client, rollMessage); // Sends the message
                         } else { // if there is no "d" for multiple dice
                             int intRoll = Integer.parseInt(roll); // Passes in the user input for one integer/die
                             total = (int) (Math.random() * intRoll); // Recalculates total for just one die
-                            String rollMessage = "*$" + "Rolled " + roll + " and got " + total + "$*"; // Message to be sent to all users
+                            String rollMessage = "*$" + "Rolled " + roll + " and got " + total + "$*"; // Message to be
+                                                                                                       // sent to all
+                                                                                                       // users
                             sendMessage(client, rollMessage); // Sends the message
                         }
                         break;
@@ -182,25 +197,41 @@ public class Room implements AutoCloseable {
                         muteTarget = comm2[1]; // defines the name based on what comes after the command
                         client.mute(muteTarget); // adds the target's name to the mutelist
                         // par36 11/27/23 - Sends the person a message they were muted
-                        ServerThread target = getClientByName(muteTarget); // par36 12/4/23 - Gets the name of the target
-                        target.sendMessage(Constants.DEFAULT_CLIENT_ID, client.getClientName() + " muted you"); // tells the target they were muted
-                        client.sendMessage(Constants.DEFAULT_CLIENT_ID, "You muted " + muteTarget); // tells the user who they muted
+                        ServerThread target = getClientByName(muteTarget); // par36 12/4/23 - Gets the name of the
+                                                                           // target
+                        target.sendMessage(Constants.DEFAULT_CLIENT_ID, client.getClientName() + " muted you"); // tells
+                                                                                                                // the
+                                                                                                                // target
+                                                                                                                // they
+                                                                                                                // were
+                                                                                                                // muted
+                        client.sendMessage(Constants.DEFAULT_CLIENT_ID, "You muted " + muteTarget); // tells the user
+                                                                                                    // who they muted
                         break;
                     case "unmute": // par36 11/21/23 - Unmute command
                         String unmuteTarget = ""; // holds the name of the unmuted person
                         unmuteTarget = comm2[1]; // defines the name based on what comes after the command
                         client.unmute(unmuteTarget); // removes the target's name from the mutelist
                         // par36 11/27/23 - Sends the person a message they were unmuted
-                        ServerThread target2 = getClientByName(unmuteTarget); // par36 12/4/23 - Gets the name of the target
-                        target2.sendMessage(Constants.DEFAULT_CLIENT_ID, client.getClientName() + " unmuted you"); // tells the target they were unmuted
-                        client.sendMessage(Constants.DEFAULT_CLIENT_ID, "You unmuted " + unmuteTarget); // tells the user who they unmuted
+                        ServerThread target2 = getClientByName(unmuteTarget); // par36 12/4/23 - Gets the name of the
+                                                                              // target
+                        target2.sendMessage(Constants.DEFAULT_CLIENT_ID, client.getClientName() + " unmuted you"); // tells
+                                                                                                                   // the
+                                                                                                                   // target
+                                                                                                                   // they
+                                                                                                                   // were
+                                                                                                                   // unmuted
+                        client.sendMessage(Constants.DEFAULT_CLIENT_ID, "You unmuted " + unmuteTarget); // tells the
+                                                                                                        // user who they
+                                                                                                        // unmuted
                         break;
                     case "help": // par36 12/12/23 - Help command (not required)
                         String helpT = "";
-                        helpT = client.getClientName(); 
-                        String helpMessage = "Hello! Here are the commands: /roll (number) or (#d#), /flip, /mute (user), /unmute (user). " + 
-                        "Formatting for text: Bold: *$(Text)$* Italic: /$(Text)$/ Underline: _$(Text)$_ Color: (r/g/b$(Text)$b/g/r)"; 
-                        ServerThread helpTarget = getClientByName(helpT); 
+                        helpT = client.getClientName();
+                        String helpMessage = "Hello! Here are the commands: /roll (number) or (#d#), /flip, /mute (user), /unmute (user). "
+                                +
+                                "Formatting for text: Bold: *$(Text)$* Italic: /$(Text)$/ Underline: _$(Text)$_ Color: (r/g/b$(Text)$b/g/r)";
+                        ServerThread helpTarget = getClientByName(helpT);
                         helpTarget.sendMessage(Constants.DEFAULT_CLIENT_ID, helpMessage);
                     default:
                         wasCommand = false;
@@ -264,16 +295,19 @@ public class Room implements AutoCloseable {
             // it was a command, don't broadcast
             return;
         }
-        if (sendPrivateMessage(sender, message)) { // par36 11/20/23 - Stops the process if the message is a private message and goes to sendPrivateMessage
+        if (sendPrivateMessage(sender, message)) { // par36 11/20/23 - Stops the process if the message is a private
+                                                   // message and goes to sendPrivateMessage
             return;
         }
-        message = messageFormat(message); // par36 11/3/23 - added for message with different characteristics (bold, color, etc.) to be processed
+        message = messageFormat(message); // par36 11/3/23 - added for message with different characteristics (bold,
+                                          // color, etc.) to be processed
         long from = sender == null ? Constants.DEFAULT_CLIENT_ID : sender.getClientId();
         Iterator<ServerThread> iter = clients.iterator();
         while (iter.hasNext()) {
             ServerThread client = iter.next();
-            if (sender != null && client.isMuted(sender.getClientName())) { // par36 11/21/23 - mutecheck: checks if the client exists and if they are muted
-                continue;                                                   // if the condition is met (they are muted), the private message isn't sent
+            if (sender != null && client.isMuted(sender.getClientName())) { // par36 11/21/23 - mutecheck: checks if the
+                                                                            // client exists and if they are muted
+                continue; // if the condition is met (they are muted), the private message isn't sent
             }
             boolean messageSent = client.sendMessage(from, message);
             if (!messageSent) {
@@ -294,15 +328,18 @@ public class Room implements AutoCloseable {
             target = comm[1].split(" ")[0]; // gets the result (target user) from the string array
             while (iter.hasNext()) {
                 ServerThread client = iter.next();
-                if (sender != null && client.isMuted(sender.getClientName())) { // par36 11/21/23 - mutecheck: checks if the client exists and if they are muted
-                    continue;                                                   // if the condition is met (they are muted), the private message isn't sent
+                if (sender != null && client.isMuted(sender.getClientName())) { // par36 11/21/23 - mutecheck: checks if
+                                                                                // the client exists and if they are
+                                                                                // muted
+                    continue; // if the condition is met (they are muted), the private message isn't sent
                 }
                 if (client.getClientName().equalsIgnoreCase(target)) { // if the client is equal to the target
                     boolean messageSent = client.sendMessage(from, message); // checking if the message is sent
                     if (!messageSent) { // if the message is not sent
                         handleDisconnect(iter, client); // disconnect the client
                     }
-                    if(sender != null) { // par36 11/21/23 - checks if the sender is null as a safety case (should never happen)
+                    if (sender != null) { // par36 11/21/23 - checks if the sender is null as a safety case (should
+                                          // never happen)
                         sender.sendMessage(from, message); // sends the message
                     }
                     return true; // if the second if condition isn't triggered, will return true with the boolean
@@ -347,7 +384,7 @@ public class Room implements AutoCloseable {
 
     protected void mutedMessage(ServerThread muter, String user) {
         ServerThread target = getClientByName(user);
-        target.sendMessage(muter.getClientId(), " muted you"); 
+        target.sendMessage(muter.getClientId(), " muted you");
     }
 
     public void close() {
@@ -356,34 +393,41 @@ public class Room implements AutoCloseable {
         clients.clear();
     }
 
-    public String messageFormat(String message) { // par36 11/3/23 - made so that the original message will change to the new message with the new font/color
+    public String messageFormat(String message) { // par36 11/3/23 - made so that the original message will change to
+                                                  // the new message with the new font/color
         String newMessage = message;
 
         // par36 11/9/23 - Different font options and colors
 
         // bold
-        newMessage = newMessage.replaceAll("\\*\\$", "<b>"); //replaces each commandtrigger with the wrapper for the font type
-        newMessage = newMessage.replaceAll("\\$\\*", "</b>"); //asymetric so start and end trigger are different
+        newMessage = newMessage.replaceAll("\\*\\$", "<b>"); // replaces each commandtrigger with the wrapper for the
+                                                             // font type
+        newMessage = newMessage.replaceAll("\\$\\*", "</b>"); // asymetric so start and end trigger are different
 
         // italic
-        newMessage = newMessage.replaceAll("/\\$", "<i>"); //replaces each commandtrigger with the wrapper for the font type
-        newMessage = newMessage.replaceAll("\\$/", "</i>"); //asymetric so start and end trigger are different
+        newMessage = newMessage.replaceAll("/\\$", "<i>"); // replaces each commandtrigger with the wrapper for the font
+                                                           // type
+        newMessage = newMessage.replaceAll("\\$/", "</i>"); // asymetric so start and end trigger are different
 
         // underline
-        newMessage = newMessage.replaceAll("_\\$", "<u>"); //replaces each commandtrigger with the wrapper for the font type
-        newMessage = newMessage.replaceAll("\\$_", "</u>"); //asymetric so start and end trigger are different
+        newMessage = newMessage.replaceAll("_\\$", "<u>"); // replaces each commandtrigger with the wrapper for the font
+                                                           // type
+        newMessage = newMessage.replaceAll("\\$_", "</u>"); // asymetric so start and end trigger are different
 
         // red
-        newMessage = newMessage.replaceAll("r\\$", "<font color= red>"); //replaces each commandtrigger with the wrapper for the color
-        newMessage = newMessage.replaceAll("\\$r", "</font>"); //asymetric so start and end trigger are different
+        newMessage = newMessage.replaceAll("r\\$", "<font color= red>"); // replaces each commandtrigger with the
+                                                                         // wrapper for the color
+        newMessage = newMessage.replaceAll("\\$r", "</font>"); // asymetric so start and end trigger are different
 
         // green
-        newMessage = newMessage.replaceAll("g\\$", "<font color= green>"); //replaces each commandtrigger with the wrapper for the color
-        newMessage = newMessage.replaceAll("\\$g", "</font>"); //asymetric so start and end trigger are different
+        newMessage = newMessage.replaceAll("g\\$", "<font color= green>"); // replaces each commandtrigger with the
+                                                                           // wrapper for the color
+        newMessage = newMessage.replaceAll("\\$g", "</font>"); // asymetric so start and end trigger are different
 
         // blue
-        newMessage = newMessage.replaceAll("b\\$", "<font color= blue>"); //replaces each commandtrigger with the wrapper for the color
-        newMessage = newMessage.replaceAll("\\$b", "</font>"); //asymetric so start and end trigger are different
+        newMessage = newMessage.replaceAll("b\\$", "<font color= blue>"); // replaces each commandtrigger with the
+                                                                          // wrapper for the color
+        newMessage = newMessage.replaceAll("\\$b", "</font>"); // asymetric so start and end trigger are different
 
         return (newMessage);
     }

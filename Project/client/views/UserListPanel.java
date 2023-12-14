@@ -13,7 +13,6 @@ import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
-//import javax.swing.JEditorPane; // par36 12/7/23 - Imported to work with client highlight changes
 
 import Project.client.ICardControls;
 
