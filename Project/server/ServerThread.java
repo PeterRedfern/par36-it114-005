@@ -8,7 +8,9 @@ import java.net.Socket;
 import java.util.ArrayList; // par36 11/21/23 - added for mutelist function
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
+import java.io.FileWriter; // par36 12/7/23 - Used to write MuteList to file
+import java.io.File; // par36 12/7/23 - Used to work with files
+import java.util.Scanner; // par36 12/7/23 - Used to take information from the files
 import Project.common.Constants;
 import Project.common.Payload;
 import Project.common.PayloadType;
@@ -50,18 +52,66 @@ public class ServerThread extends Thread {
 
     }
 
-    protected void mute(String name) { // par36 11/21/23 - mute method
-        if(!muteList.contains(name)) { // if the mutelist doesn't have the name of the muted person
-            muteList.add(name);        // it then adds the name to the list
+    public void muteListText() { // par36 12/10/23 - Writes the muteList to a file
+        try {
+            Scanner scanner = new Scanner(new File(fileName())); // gets the name for the file from the fileName method, uses the user's name
+            String muteNameList = scanner.nextLine(); // scans in the names entered to the stringArray
+            muteNameList = muteNameList.replace("[","").replace("]","");
+            String[] nameListData = muteNameList.split(","); // puts a comma at the end of each name
+            System.out.println(muteNameList);
+            for(String people: nameListData) { // for each person in the StringArray
+                mute(people.trim()); // add them to the muteList (.trim to remove any spaces)
+                System.out.println(people);
+            }
+            scanner.close();
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
     }
 
-    protected void unmute(String name) { // par36 11/21/23 - unmute method
-        muteList.remove(name);           // removes the user from the mutelist which unmutes them
+    private String fileName() { // par36 12/10/23 - fileName for muteList
+        String client = getClientName(); // gets the client's name
+        String fileName = "Project/server/mute/" + client + ".txt"; // uses their name to create and identify their list
+        return fileName;
+    }
+
+    private void newMuteList() { // par36 12/10/23 - updates the muteList 
+        FileWriter editedNameList; // creates a new fileWriter for the updates to the muteList
+        try {
+            editedNameList = new FileWriter(fileName()); 
+            editedNameList.write(muteList.toString()); // writes new changes to the muteList
+            editedNameList.close(); // closes the fileWriter
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    protected void mute(String name) { // par36 11/21/23 - mute method
+        if (!muteList.contains(name)) { // if the mutelist doesn't have the name of the muted person
+            muteList.add(name); // it then adds the name to the list
+            ServerThread target = currentRoom.getClientByName(name); 
+            if(target != null) {
+                sendMute(target.getClientId()); 
+            }
+            newMuteList(); 
+        }
+    }
+
+    protected void unmute(String name) { // par36 12/10/23 - unmute method (updated)
+        if (muteList.contains(name)) { // if the mutelist has the name of the muted person
+            muteList.remove(name); // it removes the name from the list (unmuting them)
+            ServerThread target = currentRoom.getClientByName(name); 
+            if(target != null) {
+                sendUnmute(target.getClientId()); 
+            }
+            newMuteList(); 
+        }
     }
 
     protected boolean isMuted(String name) { // par36 11/21/23 - isMuted method
-        return muteList.contains(name);      // returns true or false if someone's name is in the mutelist or not
+        return muteList.contains(name); // returns true or false if someone's name is in the mutelist or not
     }
 
     protected void setClientName(String name) {
@@ -158,6 +208,22 @@ public class ServerThread extends Thread {
         return send(p);
     }
 
+    public boolean sendMute(long clientId) {
+        Payload p = new Payload();
+        p.setPayloadType(PayloadType.MUTED);
+        p.setClientId(clientId);
+        p.setMessage(clientName + " muted someone");
+        return send(p); 
+    }
+
+    public boolean sendUnmute(long clientId) {
+        Payload p = new Payload();
+        p.setPayloadType(PayloadType.UNMUTED);
+        p.setClientId(clientId);
+        p.setMessage(clientName + " unmuted someone");
+        return send(p); 
+    }
+
     private boolean send(Payload payload) {
         try {
             logger.log(Level.FINE, "Outgoing payload: " + payload);
@@ -188,8 +254,7 @@ public class ServerThread extends Thread {
             isRunning = true;
             Payload fromClient;
             while (isRunning && // flag to let us easily control the loop
-                    (fromClient = (Payload) in.readObject()) != null // reads an object from inputStream (null would
-                                                                     // likely mean a disconnect)
+                    (fromClient = (Payload) in.readObject()) != null // reads an object from inputStream (null would likely mean a disconnect)
             ) {
 
                 logger.info("Received from client: " + fromClient);
@@ -213,6 +278,7 @@ public class ServerThread extends Thread {
         switch (p.getPayloadType()) {
             case CONNECT:
                 setClientName(p.getClientName());
+                muteListText(); // par36 12/12/23 - added to ensure muteLists load at the beggining of a session
                 break;
             case DISCONNECT:
                 Room.disconnectClient(this, getCurrentRoom());
@@ -235,6 +301,14 @@ public class ServerThread extends Thread {
             case JOIN_ROOM:
                 Room.joinRoom(p.getMessage().trim(), this);
                 break;
+            /*
+            case MUTED:
+                currentRoom.sendMute(p.getMessage().trim(), this); 
+                break; 
+            case UNMUTED:
+                sendUnmute(p.getMessage().trim(), this); 
+                break;
+            */
             default:
                 break;
 

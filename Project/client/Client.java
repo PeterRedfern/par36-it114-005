@@ -28,7 +28,6 @@ public enum Client {
     private Thread fromServerThread;
     private String clientName = "";
     private long myClientId = Constants.DEFAULT_CLIENT_ID;
-    private boolean isSeeker = false;
     private static Logger logger = Logger.getLogger(Client.class.getName());
 
     private Hashtable<Long, String> userList = new Hashtable<Long, String>();
@@ -44,10 +43,6 @@ public enum Client {
         // if the server had a problem
         return server.isConnected() && !server.isClosed() && !server.isInputShutdown() && !server.isOutputShutdown();
 
-    }
-
-    public boolean isSeeker() {
-        return isSeeker;
     }
 
     public void addListener(IClientEvents listener) {
@@ -205,7 +200,6 @@ public enum Client {
                 removeClient(p.getClientId());
                 if (p.getClientId() == myClientId) {
                     myClientId = Constants.DEFAULT_CLIENT_ID;
-                    isSeeker = false;
                 }
                 logger.info(String.format("*%s %s*",
                         p.getClientName(),
@@ -256,11 +250,20 @@ public enum Client {
                 userList.clear();
                 listeners.forEach(l -> l.onResetUserList());
                 break;
+            case MUTED: // par36 12/12/23 - added to process mute client
+                listeners.forEach(e -> {
+                    e.onMute(p.getClientId()); 
+                }); 
+                break; 
+            case UNMUTED: // par36 12/12/23 - added to process unmute client
+                listeners.forEach(e -> {
+                    e.onUnmute(p.getClientId()); 
+                });
+                break; 
             default:
                 logger.warning(Constants.ANSI_RED + String.format("Unhandled Payload type: %s", p.getPayloadType())
                         + Constants.ANSI_RESET);
                 break;
-
         }
     } catch (Exception e) {
         logger.severe("Payload handling problem");

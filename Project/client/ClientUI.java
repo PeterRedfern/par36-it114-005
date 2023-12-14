@@ -216,6 +216,7 @@ public class ClientUI extends JFrame implements IClientEvents, ICardControls {
         if (currentCard.ordinal() >= Card.CHAT.ordinal()) {
             String clientName = mapClientId(clientId);
             chatPanel.addText(String.format("%s: %s", clientName, message));
+            chatPanel.highlightUser(clientId); // par36 12/8/23 - highlights the user's name if they speak last
         }
     }
 
@@ -260,6 +261,20 @@ public class ClientUI extends JFrame implements IClientEvents, ICardControls {
     public void onRoomJoin(String roomName) {
         if (currentCard.ordinal() >= Card.CHAT.ordinal()) {
             chatPanel.addText("Joined room " + roomName);
+        }
+    }
+
+    @Override
+    public void onMute(long clientId) { // par36 12/12/23 - added to update user's name to gray when muted in the UI
+        if (currentCard.ordinal() >= Card.CHAT.ordinal()) {
+            chatPanel.muteHighlight(clientId); 
+        }
+    }
+
+    @Override
+    public void onUnmute(long clientId) { // par36 12/12/23 - added to update user's name to normal when unmuted in the UI
+        if (currentCard.ordinal() >= Card.CHAT.ordinal()) {
+            chatPanel.unmuteHighlight(clientId);
         }
     }
 }
