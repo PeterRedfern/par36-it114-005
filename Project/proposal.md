@@ -9,4 +9,4 @@
 
 <tr><td> <em>Milestone 3 Link: </em> <a rel="noreferrer noopener" href="https://github.com/PeterRedfern/par36-it114-005/blob/main/Project/Milestone3.md"_blank">Grading </a></td></tr></table>
 
-<tr><td> <em>Milestone 4 Link: </em> <a rel="noreferrer noopener" href="https://github.com/PeterRedfern/par36-it114-005/blob/Milestone4/Project/Milestone4.md"_blank">Grading </a></td></tr></table>
+<tr><td> <em>Milestone 4 Link: </em> <a rel="noreferrer noopener" href="https://github.com/PeterRedfern/par36-it114-005/blob/main/Project/Milestone4.md"_blank">Grading </a></td></tr></table>
