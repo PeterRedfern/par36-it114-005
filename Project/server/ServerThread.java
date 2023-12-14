@@ -60,11 +60,12 @@ public class ServerThread extends Thread {
             String[] nameListData = muteNameList.split(","); // puts a comma at the end of each name
             System.out.println(muteNameList);
             for(String people: nameListData) { // for each person in the StringArray
+                //mute(people.trim()); 
                 muteList.add(people.trim()); // add them to the muteList (.trim to remove any spaces)
                 System.out.println(people);
             }
             scanner.close();
-        } catch (IOException e) {
+        } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -72,7 +73,7 @@ public class ServerThread extends Thread {
 
     private String fileName() { // par36 12/10/23 - fileName for muteList
         String client = getClientName(); // gets the client's name
-        String fileName = "Project/server/mute/" + client + "'s Mutelist.txt"; // uses their name to create and identify their list
+        String fileName = client + ".txt"; // uses their name to create and identify their list
         return fileName;
     }
 
@@ -301,7 +302,7 @@ public class ServerThread extends Thread {
             case JOIN_ROOM:
                 Room.joinRoom(p.getMessage().trim(), this);
                 break;
-            /* 
+            /*
             case MUTED:
                 currentRoom.sendMute(p.getMessage().trim(), this); 
                 break; 
